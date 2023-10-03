@@ -1,0 +1,20 @@
+version: '3'
+services:
+  jdk-container:
+    build:
+      context: ./jdk-app
+    container_name: jdk-container
+    volumes:
+      - ./jdk-app/backend:/backend
+    working_dir: /backend
+    ports:
+      - "8080:8080"
+  node-container:
+    build:
+      context: ./node-app
+    container_name: node-container
+    volumes:
+      - ./node-app/front:/front
+    working_dir: /front/test
+    ports:
+      - "3000:3000"
