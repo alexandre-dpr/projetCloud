@@ -9,8 +9,8 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>backend</module>
-<!--        <module>frontend</module>-->
+        <module>jdk-app/backend</module>
+<!--        <module>node-app/frontend</module>-->
     </modules>
 
     <properties>

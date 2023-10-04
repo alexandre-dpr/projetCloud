@@ -1,11 +1,17 @@
-FROM maven:3.8.4-openjdk-17-slim
+# Build de l'appli
+FROM maven:3.8.4-openjdk-17-slim as builder
 
 WORKDIR /backend
 
-COPY ./backend .
+COPY ./backend ./
 
-RUN mvn clean install
+RUN mvn clean package
 
-RUN javac src/main/java/com/projetcloud/ProjetCloudApplication.java
+# Run de l'appli
+FROM openjdk:17.0.1-jdk-slim
 
-CMD ["java", "main/java/com/projetcloud/ProjetCloudApplication"]
+COPY --from=builder ./backend/target/backend-1.0.0.jar backend-1.0.0.jar
+
+EXPOSE 8080
+
+CMD ["java", "-jar", "backend-1.0.0.jar"]

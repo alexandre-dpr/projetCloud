@@ -6,7 +6,6 @@ services:
     container_name: jdk-container
     volumes:
       - ./jdk-app/backend:/backend
-    working_dir: /backend
     ports:
       - "8080:8080"
   node-container:
