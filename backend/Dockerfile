@@ -3,7 +3,7 @@ FROM maven:3.8.4-openjdk-17-slim as builder
 
 WORKDIR /backend
 
-COPY ./backend ./
+COPY ./ ./
 
 RUN mvn clean package
 
