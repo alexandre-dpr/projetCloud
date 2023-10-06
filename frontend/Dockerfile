@@ -1,14 +1,11 @@
-# Utilisez une image Node.js comme base
-FROM node:14
+FROM node:16.16.0 as builder
 
-# Définissez le répertoire de travail dans le conteneur
-WORKDIR /front/test
+WORKDIR /frontend
 
-# Installez les dépendances npm
+COPY ./vue/package*.json ./
 RUN npm install
+COPY ./vue ./
+RUN npm run build
 
-# Exposez le port 3000 (port par défaut pour les applications React)
-EXPOSE 3000
-
-# Commande pour lancer votre application React
-CMD ["npm", "start"]
+FROM nginx:alpine
+COPY --from=builder /frontend/dist/ /usr/share/nginx/html

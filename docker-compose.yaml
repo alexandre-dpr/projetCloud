@@ -1,6 +1,6 @@
 version: '3'
 services:
-  jdk-container:
+  backend-container:
     build:
       context: ./backend
     container_name: backend
@@ -8,12 +8,11 @@ services:
       - ./backend:/backend
     ports:
       - "8080:8080"
-  node-container:
+  frontend-container:
     build:
       context: ./frontend
     container_name: frontend
     volumes:
       - ./frontend:/frontend
-    working_dir: /frontend
     ports:
-      - "3000:3000"
+      - "80:80"
