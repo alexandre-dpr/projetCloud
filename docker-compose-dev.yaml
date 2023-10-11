@@ -1,18 +1,23 @@
 version: '3'
 services:
-  backend-container:
+  backend-dev:
     build:
       context: ./backend
+      dockerfile: ./Dockerfile-dev
     container_name: backend
     volumes:
       - ./backend:/backend
     ports:
       - "8080:8080"
-  frontend-container:
+  frontend-dev:
     build:
       context: ./frontend
+      dockerfile: ./Dockerfile-dev
     container_name: frontend
     volumes:
-      - ./frontend:/frontend
+      - ./frontend/vue:/frontend
+      - /frontend/node_modules/
     ports:
-      - "80:80"
+      - "3000:3000"
+#    depends_on:
+#      - backend-dev

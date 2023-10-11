@@ -1,0 +1,10 @@
+FROM node:16.16.0
+
+WORKDIR /frontend
+
+COPY ./vue/package*.json ./
+
+RUN npm install
+
+#CMD ["npm", "run", "dev"]
+CMD ["tail", "-f", "/dev/null"]

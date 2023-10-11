@@ -1,0 +1,17 @@
+# Utilisation d'une image Java
+FROM maven:3.8.4-openjdk-17-slim
+
+# Définir le répertoire de travail
+WORKDIR /backend
+
+# Copier le fichier pom.xml pour installer les dépendances Maven
+COPY pom.xml ./
+
+# Copier tout le projet dans le répertoire de travail
+COPY ./ ./
+
+# Exécution de Maven install pour compiler le code source
+RUN mvn install
+
+# Commande pour exécuter votre application Java
+CMD ["java", "-cp", "target/classes", "./src/main/java/com/projetcloud/ProjetCloudApplication.java"]
