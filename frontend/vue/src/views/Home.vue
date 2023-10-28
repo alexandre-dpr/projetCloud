@@ -13,6 +13,7 @@
           :key="colIndex"
           @click="dropPiece(colIndex)"
         >
+
           <div class="piece" :class="getPieceClass(col,rowIndex)"></div>
         </div>
       </div>

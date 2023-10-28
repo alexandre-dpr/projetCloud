@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {API_SERVER} from "@/ultils/constant";
+import {API_SERVER} from "@/utils/constant";
 
 export class GameRequest{
   async jouerCoup(colonne: number){
