@@ -1,8 +1,9 @@
 // Composables
 import { createRouter, createWebHistory } from 'vue-router';
-import Home from '../views/Home.vue'
+import Partie from '../views/Partie.vue'
 import Login from '../views/Login.vue'
 import Menu from '../views/Menu.vue'
+import Salon from '../views/Salon.vue'
 
 
 const routes = [
@@ -17,9 +18,16 @@ const routes = [
     name: 'menu'
   },
   {
-    path: '/partie/:id',
-    component: Home,
+    //path: '/partie/:id',
+    path: '/partie',
+    component: Partie,
     name: 'partie'
+  },
+  {
+    //path: '/partie/:id',
+    path: '/salon',
+    component: Salon,
+    name: 'salon'
   },
 ]
 
