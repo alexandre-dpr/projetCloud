@@ -2,6 +2,7 @@ package com.projetcloud.controller;
 
 import com.projetcloud.exceptions.MauvaisesCoordonneesExcpetion;
 import com.projetcloud.service.Facade;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,7 +12,6 @@ public class AppController {
 
     private final Facade facade;
 
-    //TODO : initialiser le bean
     public AppController(Facade facade) {
         this.facade = facade;
     }
@@ -23,8 +23,8 @@ public class AppController {
      * @param y
      * @return
      */
-    @PostMapping("/")
-    public ResponseEntity<?> jouerCoup(@PathVariable String idPartie, int x, int y){
+    @PostMapping("")
+    public ResponseEntity<?> jouerCoup(@PathVariable String idPartie,@RequestParam int x,@RequestParam int y){
         try {
            facade.jouerCoup(idPartie,x,y);
            return ResponseEntity.ok().build();
@@ -39,7 +39,7 @@ public class AppController {
      * @param idPartie : i de la partie
      * @return : la partie en JSON
      */
-    @GetMapping("/")
+    @GetMapping("")
     public ResponseEntity<?> getPartie(@PathVariable String idPartie){
       // TODO : add try/catch après création du modèle
             return ResponseEntity.ok(facade.getPartie(idPartie));

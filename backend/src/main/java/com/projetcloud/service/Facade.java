@@ -2,10 +2,12 @@ package com.projetcloud.service;
 
 
 import com.projetcloud.exceptions.MauvaisesCoordonneesExcpetion;
+import org.springframework.stereotype.Component;
 
 /**
  * {@inheritDoc}
  */
+@Component
 public class Facade implements IFacade{
 
     /**
