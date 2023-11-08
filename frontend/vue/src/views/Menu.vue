@@ -20,14 +20,11 @@
 import router from "@/router";
 
 function creerPartie(){
-  console.log("creerPartie")
   router.push("partie")
 }
 
 function rejoindrePartie(){
-  console.log("rejoindrePartie")
   router.push("salon")
-
 }
 
 

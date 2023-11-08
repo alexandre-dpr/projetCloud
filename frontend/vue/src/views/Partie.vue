@@ -1,20 +1,24 @@
 <template>
-  <div>
-    <h1>Puissance 4</h1>
-    <div class="board">
-      <div
-        class="cell"
-        v-for="(row, rowIndex) in board"
-        :key="rowIndex"
-      >
-        <div
-          class="slot"
-          v-for="(col, colIndex) in row"
-          :key="colIndex"
-          @click="dropPiece(colIndex)"
-        >
-
-          <div class="piece" :class="getPieceClass(col,rowIndex)"></div>
+  <div class="background-menu">
+    <div class="d-flex flex-column align-center">
+      <h1 class="text-white ">Puissance 4</h1>
+      <div class="d-flex justify-space-between">
+        <div class="d-flex justify-center align-center flex-column">
+          <p>Joueur1</p>
+          <p>Couleur: Rouge</p>
+        </div>
+      <div class="container-board mt-16">
+        <div class="board">
+          <div class="cell" v-for="(row, rowIndex) in board" :key="rowIndex">
+            <div class="slot" v-for="(col, colIndex) in row" :key="colIndex" @click="dropPiece(colIndex)">
+              <div class="piece" :class="getPieceClass(col, rowIndex)"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+        <div class="d-flex justify-center align-center flex-column">
+          <p>Joueur2</p>
+          <p>Couleur: Jaune</p>
         </div>
       </div>
     </div>
@@ -23,15 +27,15 @@
 
 <script lang="ts" setup>
 
-import {onMounted, ref} from "vue";
+import { onMounted, ref } from "vue";
 
 var board = ref([
-  [null,null,null,null,null,null,null],
-  [null,null,null,null,null,null,null],
-  [null,null,null,null,null,null,null],
-  [null,null,null,null,null,null,null],
-  [null,null,null,null,null,null,null],
-  [null,null,null,null,null,null,null],
+  [null, null, null, null, null, null, null],
+  [null, null, null, null, null, null, null],
+  [null, null, null, null, null, null, null],
+  [null, null, null, null, null, null, null],
+  [null, null, null, null, null, null, null],
+  [null, null, null, null, null, null, null],
 ])
 var currentPlayer = "red"
 
@@ -56,6 +60,19 @@ function dropPiece(colIndex) {
 </script>
 
 <style scoped>
+.background-menu{
+  height: 100vh;
+  width: 100vw;
+  background-color: royalblue;
+}
+.container-board{
+  width: auto;
+  height: auto;
+  padding: 10px;
+  background-color: white;
+  border-radius: 8px;
+  border: 2px solid black;
+}
 .board {
   display: flex;
   flex-direction: column;
@@ -111,103 +128,131 @@ function dropPiece(colIndex) {
 .drop-0 {
   animation: bounce-0 0.5s ease-in-out;
 }
+
 .drop-1 {
-   animation: bounce-1 0.5s ease-in-out;
- }
+  animation: bounce-1 0.5s ease-in-out;
+}
+
 .drop-2 {
-    animation: bounce-2 0.5s ease-in-out;
-  }
+  animation: bounce-2 0.5s ease-in-out;
+}
+
 .drop-3 {
-     animation: bounce-3 0.5s ease-in-out;
-   }
+  animation: bounce-3 0.5s ease-in-out;
+}
+
 .drop-4 {
-      animation: bounce-4 0.5s ease-in-out;
+  animation: bounce-4 0.5s ease-in-out;
 }
 
 .drop-5 {
   animation: bounce-5 0.5s ease-in-out;
 }
+
 @keyframes bounce-0 {
-  0%{
+  0% {
     transform: translateY(-50px);
   }
+
   80% {
     transform: translateY(0px);
   }
+
   90% {
     transform: translateY(-10px);
   }
-  100%{
-    transform: translateY(0);
-  }
-}@keyframes bounce-1 {
-   0%{
-     transform: translateY(-100px);
-   }
-   80% {
-     transform: translateY(0px);
-   }
-   90% {
-     transform: translateY(-10px);
-   }
-   100%{
-     transform: translateY(0);
-   }
- }@keyframes bounce-2 {
-    0%{
-      transform: translateY(-150px);
-    }
-    80% {
-      transform: translateY(0px);
-    }
-    90% {
-      transform: translateY(-10px);
-    }
-    100%{
-      transform: translateY(0);
-    }
-  }
-@keyframes bounce-3 {
-  0%{
-    transform: translateY(-200px);
-  }
-  80% {
-    transform: translateY(0px);
-  }
-  90% {
-    transform: translateY(-10px);
-  }
-  100%{
-    transform: translateY(0);
-  }
-}
-@keyframes bounce-4 {
-  0%{
-    transform: translateY(-250px);
-  }
-  80% {
-    transform: translateY(0px);
-  }
-  90% {
-    transform: translateY(-10px);
-  }
-  100%{
-    transform: translateY(0);
-  }
-}
-@keyframes bounce-5 {
-  0%{
-    transform: translateY(-300px);
-  }
-  80% {
-    transform: translateY(0px);
-  }
-  90% {
-    transform: translateY(-10px);
-  }
-  100%{
+
+  100% {
     transform: translateY(0);
   }
 }
 
-</style>
+@keyframes bounce-1 {
+  0% {
+    transform: translateY(-100px);
+  }
+
+  80% {
+    transform: translateY(0px);
+  }
+
+  90% {
+    transform: translateY(-10px);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes bounce-2 {
+  0% {
+    transform: translateY(-150px);
+  }
+
+  80% {
+    transform: translateY(0px);
+  }
+
+  90% {
+    transform: translateY(-10px);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes bounce-3 {
+  0% {
+    transform: translateY(-200px);
+  }
+
+  80% {
+    transform: translateY(0px);
+  }
+
+  90% {
+    transform: translateY(-10px);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes bounce-4 {
+  0% {
+    transform: translateY(-250px);
+  }
+
+  80% {
+    transform: translateY(0px);
+  }
+
+  90% {
+    transform: translateY(-10px);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes bounce-5 {
+  0% {
+    transform: translateY(-300px);
+  }
+
+  80% {
+    transform: translateY(0px);
+  }
+
+  90% {
+    transform: translateY(-10px);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}</style>

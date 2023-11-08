@@ -8,7 +8,7 @@ import Salon from '../views/Salon.vue'
 
 const routes = [
   {
-    path: '/login',
+    path: '/',
     component: Login,
     name: 'login'
   },
