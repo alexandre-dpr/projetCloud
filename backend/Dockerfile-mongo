@@ -1,9 +1,0 @@
-# Utilisation de l'image officielle MongoDB
-FROM mongo:6.0
-
-# Spécification de la base de données et de la collection à créer
-ENV MONGO_INITDB_DATABASE=projetCloud
-ENV MONGO_INITDB_COLLECTION=user
-
-# Copie du script d'initialisation dans le conteneur
-COPY init-db.js /docker-entrypoint-initdb.d/

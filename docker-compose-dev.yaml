@@ -1,9 +1,7 @@
 version: '3'
 services:
   mongodb_container:
-    build:
-      context: ./backend
-      dockerfile: ./Dockerfile-mongo
+    image: mongo:6.0
     container_name: mongo
     restart: always
     ports:
