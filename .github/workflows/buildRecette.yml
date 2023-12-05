@@ -1,9 +1,10 @@
-name: Build and Push to Azure Container Registry (Recette)
+name: Build-and-Push-to-Container-Registry-Recette
 
 on:
-  push:
-    branches:
-      - develop
+  workflow_run:
+    workflows: [ "Tests-Unitaires-Backend" ]
+    types:
+      - completed
 
 jobs:
   backend:
@@ -27,25 +28,25 @@ jobs:
           docker build -t recette.azurecr.io/backend:latest .
           docker push recette.azurecr.io.io/backend:latest
 
-    frontend:
-      runs-on: ubuntu-latest
+  frontend:
+    runs-on: ubuntu-latest
 
-      steps:
-        - name: Checkout code
-          uses: actions/checkout@v2
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-        - name: Set up Azure CLI
-          uses: azure/login@v1
-          with:
-            creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: Set up Azure CLI
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-        - name: Build Vue.js application
-          run: |
-            cd frontend/vue
-            npm install
-            npm run build
+      - name: Build Vue.js application
+        run: |
+          cd frontend/vue
+          npm install
+          npm run build
 
-        - name: Build and push Docker image
-          run: |
-            docker build -t recette.azurecr.io.io/frontend:latest .
-            docker push recette.azurecr.io.io/frontend:latest
+      - name: Build and push Docker image
+        run: |
+          docker build -t recette.azurecr.io.io/frontend:latest .
+          docker push recette.azurecr.io.io/frontend:latest
