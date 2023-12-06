@@ -6,13 +6,13 @@ COPY ./frontend/vue/package*.json ./
 
 RUN npm install
 COPY ./frontend/vue ./
+
 RUN npm run build
 
-# Serveur nginx pour faire tourner le front
 FROM nginx:alpine
 
-WORKDIR /frontend
+WORKDIR /usr/share/nginx/html
 
-COPY ./frontend/vue/dist /usr/share/nginx/html
+COPY --from=0 /frontend/dist .
 
-EXPOSE 80
+RUN ls -R ./frontend/vue/dist
