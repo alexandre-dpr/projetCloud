@@ -2,11 +2,15 @@ FROM node:16.16.0
 
 WORKDIR /frontend
 
-RUN pwd
-RUN ls -R
-
 COPY ./frontend/vue/package*.json ./
 
 RUN npm install
 COPY ./frontend/vue ./
 RUN npm run build
+
+# Serveur nginx pour faire tourner le front
+FROM nginx:alpine
+
+COPY ./frontend/vue/dist /usr/share/nginx/html
+
+EXPOSE 80
