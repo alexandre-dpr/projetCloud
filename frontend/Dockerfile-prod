@@ -2,10 +2,11 @@ FROM node:16.16.0
 
 WORKDIR /frontend
 
+COPY ./vue/package*.json ./
+
 RUN pwd
 RUN ls -R
 
-COPY ./vue/package*.json ./
 RUN npm install
 COPY ./vue ./
 RUN npm run build

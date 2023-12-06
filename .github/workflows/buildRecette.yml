@@ -34,6 +34,9 @@ jobs:
 
   frontend:
     runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
 
     steps:
       - name: Checkout code
@@ -47,6 +50,9 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push Docker image
-        run: |
-          docker build -t ghcr.io/${{ github.actor }}/projetcloud/frontend:latest -f frontend/Dockerfile-prod .
-          docker push ghcr.io/${{ github.actor }}/projetcloud/frontend:latest
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: frontend/Dockerfile-prod
+          push: true
+          tags: ghcr.io/${{ github.actor }}/projetcloud/frontend:latest
