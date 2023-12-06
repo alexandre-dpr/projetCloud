@@ -1,4 +1,4 @@
-FROM node:16.16.0
+FROM node:16.16.0 AS builder
 
 WORKDIR /frontend
 
@@ -13,7 +13,4 @@ FROM nginx:alpine
 
 WORKDIR /usr/share/nginx/html
 
-#COPY /frontend/dist .
-
-RUN ls -R /
-RUN ls -R /frontend/vue/dist
+COPY --from=builder /frontend/dist .
