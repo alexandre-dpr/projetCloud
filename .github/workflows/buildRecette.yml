@@ -23,7 +23,7 @@ jobs:
 
       - name: Build Java application
         run: |
-          ./mvnw clean package
+          ./backend/mvnw clean package
 
       - name: Build and push Docker image
         run: |
