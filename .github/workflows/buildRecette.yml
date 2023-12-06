@@ -27,7 +27,7 @@ jobs:
           context: .
           file: backend/Dockerfile-prod
           push: true
-          tags: ghcr.io/${{ github.actor }}/projetcloud/backend:latest
+          tags: ghcr.io/projetcloud/backend:latest
 
   frontend:
     runs-on: ubuntu-latest
