@@ -10,10 +10,9 @@ RUN mvn clean package
 # Run de l'appli
 FROM openjdk:17.0.1-jdk-slim
 
-RUN pwd
-RUN ls -R
-
 COPY --from=builder ./backend/backend/target/backend-1.0.0.jar backend-1.0.0.jar
+
+RUN ls -R
 
 EXPOSE 8080
 
