@@ -21,13 +21,9 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build Java application
-        run: |
-          ./backend/mvnw clean package
-
       - name: Build and push Docker image
         run: |
-          docker build -t ghcr.io/projetcloud/backend:latest .
+          docker build -t ghcr.io/projetcloud/backend:latest -f backend/Dockerfile-prod .
           docker push ghcr.io/projetcloud/backend:latest
 
   frontend:
@@ -44,13 +40,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build Vue.js application
-        run: |
-          cd frontend/vue
-          npm install
-          npm run build
-
       - name: Build and push Docker image
         run: |
-          docker build -t ghcr.io/projetcloud/frontend:latest .
+          docker build -t ghcr.io/projetcloud/frontend:latest -f frontend/Dockerfile-prod .
           docker push ghcr.io/projetcloud/frontend:latest
