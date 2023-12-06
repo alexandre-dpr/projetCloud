@@ -22,9 +22,12 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push Docker image
-        run: |
-          docker build -t ghcr.io/${{ github.actor }}/projetcloud/backend:latest -f backend/Dockerfile-prod .
-          docker push ghcr.io/${{ github.actor }}/projetcloud/backend:latest
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: backend/Dockerfile-prod
+          push: true
+          tags: ghcr.io/${{ github.actor }}/projetcloud/backend:latest
 
   frontend:
     runs-on: ubuntu-latest
