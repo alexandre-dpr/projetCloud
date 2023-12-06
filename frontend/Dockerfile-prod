@@ -13,7 +13,7 @@ FROM nginx:alpine
 
 WORKDIR /usr/share/nginx/html
 
-COPY /frontend/dist .
+#COPY /frontend/dist .
 
-RUN ls -R /frontend/vue/dist
 RUN ls -R /
+RUN ls -R /frontend/vue/dist
