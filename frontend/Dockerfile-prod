@@ -11,6 +11,8 @@ RUN npm run build
 # Serveur nginx pour faire tourner le front
 FROM nginx:alpine
 
+WORKDIR /frontend
+
 COPY ./frontend/vue/dist /usr/share/nginx/html
 
 EXPOSE 80
