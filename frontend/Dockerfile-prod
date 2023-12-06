@@ -3,7 +3,7 @@ FROM node:16.16.0
 WORKDIR /frontend
 
 RUN pwd
-RUN ls -R /backend/target
+RUN ls -R
 
 COPY ./vue/package*.json ./
 RUN npm install
