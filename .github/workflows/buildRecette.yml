@@ -19,8 +19,7 @@ jobs:
 
       - name: Extract project version from pom.xml
         id: extract-version
-        run: |
-          echo "::set-output name=version::$(xmllint --xpath "string(/project/version)" pom.xml)"
+        uses: entimaniac/read-pom-version-action@1.0.0
 
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v1
@@ -49,8 +48,7 @@ jobs:
 
       - name: Extract project version from pom.xml
         id: extract-version
-        run: |
-          echo "::set-output name=version::$(xmllint --xpath "string(/project/version)" pom.xml)"
+        uses: entimaniac/read-pom-version-action@1.0.0
 
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v1
