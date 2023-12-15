@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: frontend-container
-          image: ghcr.io/cripsoo/projetcloud/frontend-recette:latest
+          image: ghcr.io/cripsoo/projetcloud/frontend-recette:1.0.0
           ports:
             - containerPort: 80
       imagePullSecrets:

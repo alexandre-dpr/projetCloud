@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: backend-container
-          image: ghcr.io/cripsoo/projetcloud/backend-recette:latest
+          image: ghcr.io/cripsoo/projetcloud/backend-recette:1.0.0
           ports:
             - containerPort: 8080
       imagePullSecrets:
