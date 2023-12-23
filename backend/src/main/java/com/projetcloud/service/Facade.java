@@ -1,6 +1,8 @@
 package com.projetcloud.service;
 
 
+import com.projetcloud.dto.response.CoupDTO;
+import com.projetcloud.dto.response.NomJoueur;
 import com.projetcloud.exceptions.*;
 import com.projetcloud.modele.Puissance4;
 import org.springframework.stereotype.Component;
@@ -29,12 +31,12 @@ public class Facade implements IFacade{
      * {@inheritDoc}
      */
     @Override
-    public Puissance4 jouerCoup(UUID idPartie, int colonne, String joueur) throws MauvaisesCoordonneesExcpetion, PartieInexistanceException, CoupNonAutoriseException, MauvaisTourException, PartieTermineException {
-        if (colonne<0){
+    public Puissance4 jouerCoup(UUID idPartie, CoupDTO coupDTO) throws MauvaisesCoordonneesExcpetion, PartieInexistanceException, CoupNonAutoriseException, MauvaisTourException, PartieTermineException {
+        if (coupDTO.getColonne()<0){
             throw new MauvaisesCoordonneesExcpetion();
         }
         Puissance4 partie = this.getPartie(idPartie);
-        partie.jouerTour(joueur,colonne);
+        partie.jouerTour(coupDTO.getJoueur(), coupDTO.getColonne());
         return partie;
     }
 
@@ -63,11 +65,12 @@ public class Facade implements IFacade{
         return idUnique;
     }
 
+
+
     @Override
-    public UUID rejoindreSalon(UUID idSalon, String pseudoJoueur) throws TropDeJoueurException {
-        ArrayList<String> joueurs = salon.get(idSalon);
-        if (joueurs.size() < 2) {
-            joueurs.add(pseudoJoueur);
+    public UUID rejoindreSalon(UUID idSalon, NomJoueur pseudoJoueur) throws TropDeJoueurException {
+        if (salon.get(idSalon).size() < 2) {
+            salon.get(idSalon).add(pseudoJoueur.getUsername());
         }else {
             throw new TropDeJoueurException();
         }
@@ -75,12 +78,24 @@ public class Facade implements IFacade{
     }
 
     @Override
-    public ArrayList<String> getSalon(UUID idSalon) throws SalonInexistantException{
+    public boolean getSalon(UUID idSalon) throws SalonInexistantException{
         try {
-            return this.salon.get(idSalon);
+            ArrayList<String> joueurs = this.salon.get(idSalon);
+            if (joueurs.size() == 2){
+                if (!parties.containsKey(idSalon)){
+                    Puissance4 nouvellePartie = new Puissance4(salon.get(idSalon));
+                    parties.put(idSalon,nouvellePartie);
+                }
+                return true;
+            }
+            return false;
         }catch (Exception e){
             throw new SalonInexistantException();
         }
+    }
+    @Override
+    public Map<UUID, ArrayList<String>> getSalons() throws SalonInexistantException{
+            return this.salon;
     }
 
 

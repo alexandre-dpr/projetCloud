@@ -1,5 +1,7 @@
 package com.projetcloud.controller;
 
+import com.projetcloud.dto.response.CoupDTO;
+import com.projetcloud.dto.response.NomJoueur;
 import com.projetcloud.exceptions.*;
 import com.projetcloud.service.Facade;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +28,9 @@ public class AppController {
      * @return
      */
     @PostMapping("/partie/{idPartie}/coup")
-    public ResponseEntity<?> jouerCoup(@PathVariable UUID idPartie, @RequestParam int colonne, @RequestParam String joueur){
+    public ResponseEntity<?> jouerCoup(@PathVariable UUID idPartie, @RequestBody CoupDTO coupDTO){
         try {
-            facade.jouerCoup(idPartie, colonne, joueur);
+            facade.jouerCoup(idPartie, coupDTO);
             return ResponseEntity.ok().build();
         } catch (MauvaisesCoordonneesExcpetion e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Coordonnées invalides");
@@ -59,14 +61,18 @@ public class AppController {
     }
 
     @PostMapping("/salon")
-    public ResponseEntity<?> creerSalon(@RequestParam String joueur) {
-        return ResponseEntity.ok(facade.creerSalon(joueur));
+    public ResponseEntity<?> creerSalon(@RequestBody NomJoueur nomJoueur) {
+        return ResponseEntity.ok(facade.creerSalon(nomJoueur.getUsername()));
+    }
+    @GetMapping("/salon")
+    public ResponseEntity<?> getSalon() throws SalonInexistantException {
+        return ResponseEntity.ok(facade.getSalons());
     }
 
     @PostMapping("/salon/{idSalon}")
-    public ResponseEntity<?> rejoindreSalon(@PathVariable UUID idSalon, @RequestParam String joueur) {
+    public ResponseEntity<?> rejoindreSalon(@PathVariable UUID idSalon, @RequestBody NomJoueur nomJoueur) {
         try {
-            return ResponseEntity.ok(facade.rejoindreSalon(idSalon, joueur));
+            return ResponseEntity.ok(facade.rejoindreSalon(idSalon, nomJoueur));
         } catch (TropDeJoueurException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Trop de joueurs dans le salon");
         }

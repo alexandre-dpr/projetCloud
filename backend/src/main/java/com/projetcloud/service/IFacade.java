@@ -1,9 +1,12 @@
 package com.projetcloud.service;
 
+import com.projetcloud.dto.response.CoupDTO;
+import com.projetcloud.dto.response.NomJoueur;
 import com.projetcloud.exceptions.*;
 import com.projetcloud.modele.Puissance4;
 
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -16,7 +19,7 @@ public interface IFacade {
 
      */
 
-    Puissance4 jouerCoup(UUID idPartie, int colonne, String joueur) throws MauvaisesCoordonneesExcpetion, PartieInexistanceException, CoupNonAutoriseException, MauvaisTourException, PartieTermineException;
+    Puissance4 jouerCoup(UUID idPartie, CoupDTO coupDTO) throws MauvaisesCoordonneesExcpetion, PartieInexistanceException, CoupNonAutoriseException, MauvaisTourException, PartieTermineException;
 
     Puissance4 creerPartie(UUID id, ArrayList<String> listeJoueur);
 
@@ -31,7 +34,10 @@ public interface IFacade {
 
     UUID creerSalon(String pseudo);
 
-    UUID rejoindreSalon(UUID idSalon, String pseudoJoueur) throws TropDeJoueurException;
 
-    ArrayList<String> getSalon(UUID idSalon) throws SalonInexistantException;
+    UUID rejoindreSalon(UUID idSalon, NomJoueur pseudoJoueur) throws TropDeJoueurException;
+
+    boolean getSalon(UUID idSalon) throws SalonInexistantException;
+
+    Map<UUID, ArrayList<String>> getSalons() throws SalonInexistantException;
 }
