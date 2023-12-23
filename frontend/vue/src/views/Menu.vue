@@ -21,8 +21,8 @@ import router from "@/router";
 import {jwtDecode} from "jwt-decode";
 import {GameRequest} from "@/request/GameRequest";
 
-
-const tokenDecode :any = jwtDecode(localStorage.getItem("token"));
+const token : any =localStorage.getItem("token")
+const tokenDecode :any = jwtDecode(token);
 var gameRequest = new GameRequest();
 async function creerPartie() {
   const idSalon: any = await gameRequest.creerPartie(tokenDecode.sub);

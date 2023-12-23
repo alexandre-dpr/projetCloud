@@ -48,7 +48,8 @@ const winner = ref("")
 
 const gameRequest = new GameRequest();
 var route :any  =  useRouter();
-const tokenDecode :any = jwtDecode(localStorage.getItem("token"));
+const token : any =localStorage.getItem("token")
+const tokenDecode :any = jwtDecode(token);
 
 var board = ref([
   [null, null, null, null, null, null, null],
@@ -87,7 +88,7 @@ const getJeu = setInterval(async () => {
   }
 } ,1000)
 
-const getPieceClass = (value, index) => {
+const getPieceClass = (value :any, index :any) => {
   return value === "ROUGE" ? `red-piece drop-${index}` : value === "JAUNE" ? `yellow-piece drop-${index}` : "";
 }
 
@@ -97,7 +98,7 @@ onUnmounted(()=>{
 })
 
 
-async function dropPiece(colIndex) {
+async function dropPiece(colIndex :any) {
   if (!partieTerminee.value) {
 
 

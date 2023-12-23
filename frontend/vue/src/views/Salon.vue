@@ -34,7 +34,7 @@ onBeforeMount(async () => {
   const data = response.data
   for (const id in data) {
     if (Object.hasOwnProperty.call(data, id)) {
-      const arrayData = data[id]; // Le tableau associé à l'ID
+      const arrayData = data[id];
       if (arrayData.length <2) {
         const json = {
           "id": id,
