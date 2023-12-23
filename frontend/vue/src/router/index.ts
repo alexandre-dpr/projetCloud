@@ -18,8 +18,8 @@ const routes = [
     name: 'menu'
   },
   {
-    //path: '/partie/:id',
-    path: '/partie',
+    path: '/partie/:id',
+    //path: '/partie',
     component: Partie,
     name: 'partie'
   },

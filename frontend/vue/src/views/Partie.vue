@@ -2,9 +2,10 @@
   <div class="background-menu">
     <div class="d-flex flex-column align-center">
       <h1 class="text-white ">Puissance 4</h1>
+      <div v-if="isFull">
       <div class="d-flex justify-space-between">
         <div class="d-flex justify-center align-center flex-column">
-          <p>Joueur1</p>
+          <p>{{listeJoueur[0]}}</p>
           <p>Couleur: Rouge</p>
         </div>
       <div class="container-board mt-16">
@@ -17,9 +18,17 @@
         </div>
       </div>
         <div class="d-flex justify-center align-center flex-column">
-          <p>Joueur2</p>
+          <p>{{listeJoueur[1]}}</p>
           <p>Couleur: Jaune</p>
         </div>
+      </div>
+        <div v-if="partieTerminee">
+          <p>WINNER ISSSSSS {{winner}}</p>
+          <button>Revenir à l'accueil</button>
+        </div>
+      </div>
+      <div v-if="!isFull">
+        <p>En attente</p>
       </div>
     </div>
   </div>
@@ -27,7 +36,19 @@
 
 <script lang="ts" setup>
 
-import { onMounted, ref } from "vue";
+import {onMounted, onUnmounted, ref} from "vue";
+import {GameRequest} from "@/request/GameRequest";
+import {useRouter} from "vue-router";
+import {jwtDecode} from "jwt-decode";
+
+const isFull = ref(false);
+const partieTerminee = ref(false)
+const listeJoueur = ref([])
+const winner = ref("")
+
+const gameRequest = new GameRequest();
+var route :any  =  useRouter();
+const tokenDecode :any = jwtDecode(localStorage.getItem("token"));
 
 var board = ref([
   [null, null, null, null, null, null, null],
@@ -37,24 +58,52 @@ var board = ref([
   [null, null, null, null, null, null, null],
   [null, null, null, null, null, null, null],
 ])
-var currentPlayer = "red"
 
+const getJeu = setInterval(async () => {
+  if (!isFull.value) {
+    const response: any = await gameRequest.getSalon(route.currentRoute.value.params.id);
+    console.log(response)
+    if (response) {
+      isFull.value = true;
+    }
+  } else {
+    const response : any = await gameRequest.getPartie(route.currentRoute.value.params.id)
+    console.log(response)
+
+      listeJoueur.value = response.joueurs;
+      for (var i = 0; i < response.matrice.length; i++) {
+        for (var j = 0; j < response.matrice[i].length; j++) {
+          if (response.matrice[i][j] !== null) {
+            board.value[i][j] = response.matrice[i][j];
+          }
+        }
+      }
+
+      winner.value = response.winner;
+      partieTerminee.value = response.partieTerminee
+
+    console.log(board.value)
+
+  }
+} ,1000)
 
 const getPieceClass = (value, index) => {
-  return value === "red" ? `red-piece drop-${index}` : value === "yellow" ? `yellow-piece drop-${index}` : "";
+  return value === "ROUGE" ? `red-piece drop-${index}` : value === "JAUNE" ? `yellow-piece drop-${index}` : "";
 }
-onMounted(() => {
 
+
+onUnmounted(()=>{
+  clearInterval(getJeu);
 })
-function dropPiece(colIndex) {
 
-  for (let rowIndex = 5; rowIndex >= 0; rowIndex--) {
-    if (!board.value[rowIndex][colIndex]) {
-      board.value[rowIndex][colIndex] = currentPlayer;
-      currentPlayer = currentPlayer === "red" ? "yellow" : "red";
-      return;
-    }
+
+async function dropPiece(colIndex) {
+  if (!partieTerminee.value) {
+
+
+    await gameRequest.jouerCoup(route.currentRoute.value.params.id, colIndex, tokenDecode.sub);
   }
+
 }
 
 </script>

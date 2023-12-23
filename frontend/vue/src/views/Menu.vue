@@ -18,9 +18,15 @@
 <script lang="ts" setup>
 
 import router from "@/router";
+import {jwtDecode} from "jwt-decode";
+import {GameRequest} from "@/request/GameRequest";
 
-function creerPartie(){
-  router.push("partie")
+
+const tokenDecode :any = jwtDecode(localStorage.getItem("token"));
+var gameRequest = new GameRequest();
+async function creerPartie() {
+  const idSalon: any = await gameRequest.creerPartie(tokenDecode.sub);
+  router.push({ name: 'partie', params: { id: idSalon } })
 }
 
 function rejoindrePartie(){

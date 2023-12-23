@@ -2,7 +2,7 @@
   <v-btn
     block
     :class="btnClass"
-    :onclick="handleClick"
+    @click="handleClick"
   >{{label}}</v-btn>
 </template>
 
@@ -14,12 +14,7 @@ defineProps({
   btnClass:String,
   handleClick: Function
 })
-var isLogin = true;
 
-function setIsLogin(){
-  console.log(isLogin)
-  isLogin = !isLogin;
-}
 </script>
 
 <style scoped>

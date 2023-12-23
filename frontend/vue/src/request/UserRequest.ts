@@ -3,18 +3,36 @@ import {API_SERVER} from "@/utils/constant";
 
 export class UserRequest {
 
-  async login(mail:string, password:string){
+  async login(user:string, password:string){
     try {
-      const response = await axios.get(API_SERVER);
-      return response.data;
-    }catch (error){
-      throw error
+      return await axios.post(API_SERVER+"auth/login",
+        {
+          "username" : user,
+          "password" : password
+        });
+    } catch (error) {
+      throw error;
     }
   }
-  async register(mail: string, password:string, name:string) {
+  async login(user:string, password:string){
     try {
-      const response = await axios.post(API_SERVER);
-      return response.data;
+      return await axios.post(API_SERVER+"auth/login",
+        {
+          "username" : user,
+          "password" : password
+        });
+    } catch (error) {
+      throw error;
+    }
+  }
+  async register(name: string, password:string) {
+    try {
+      return await axios.post(API_SERVER+"auth/register",
+        {
+          "username" : name,
+          "password" : password
+        });
+
     } catch (error) {
       throw error;
     }

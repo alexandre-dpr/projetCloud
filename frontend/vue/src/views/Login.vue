@@ -5,8 +5,8 @@
       <div class="cardForm mt-16" v-if="isLogin">
         <form>
           <v-text-field
-            v-model="email"
-            label="Adresse email"
+            v-model="pseudo"
+            label="pseudo"
           ></v-text-field>
           <v-text-field
             v-model="password"
@@ -23,10 +23,6 @@
           label="Pseudo">
           </v-text-field>
           <v-text-field
-            v-model="email"
-            label="Adresse email"
-          ></v-text-field>
-          <v-text-field
             v-model="password"
             label="Mot de passe"
           ></v-text-field>
@@ -41,22 +37,34 @@
 import Button from '../components/Button'
 import {ref} from "vue";
 import router from "@/router";
+import {UserRequest} from "@/request/UserRequest";
+
 
 var isLogin = ref(true);
-var email = ref('');
-var password = ref('')
-var pseudo = ref('')
+var password = ref('');
+var pseudo = ref('');
+var request = new UserRequest();
 
 
 function setIsLogin(){
   isLogin.value = !isLogin.value;
 }
 
-function connexion(){
-  router.push("menu")
+async function connexion(){
+  const resp = await request.login(pseudo.value,password.value)
+  if (resp.status === 200){
+    localStorage.setItem("token",resp.data);
+    router.push("menu")
+  }
 }
-function inscription(){
-  router.push("menu")
+async function inscription(){
+  const resp = await request.register(pseudo.value,password.value)
+  console.log(resp)
+  if (resp.status === 201){
+    localStorage.setItem("token",resp.data);
+    router.push('menu');
+
+  }
 }
 </script>
 
