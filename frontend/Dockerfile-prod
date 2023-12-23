@@ -1,8 +1,16 @@
-FROM node:16.16.0
+FROM node:16.16.0 AS builder
 
 WORKDIR /frontend
 
-COPY ./vue/package*.json ./
+COPY ./frontend/vue/package*.json ./
+
 RUN npm install
-COPY ./vue ./
+COPY ./frontend/vue ./
+
 RUN npm run build
+
+FROM nginx:alpine
+
+WORKDIR /usr/share/nginx/html
+
+COPY --from=builder /frontend/dist .
