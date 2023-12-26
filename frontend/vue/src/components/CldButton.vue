@@ -6,7 +6,13 @@
   >{{label}}</v-btn>
 </template>
 
-<script lang="ts" setup>
+<script lang="ts">
+export default {
+  name: "CldButton"
+}
+</script>
+
+<script setup lang="ts">
 import {defineProps} from 'vue'
 
 defineProps({

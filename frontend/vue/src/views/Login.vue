@@ -12,8 +12,8 @@
             v-model="password"
             label="Mot de passe"
           ></v-text-field>
-        <Button btnClass="red" label="Connexion" :handleClick="connexion"></Button>
-        <Button btnClass="mt-4 yellow" label="Se créer un compte" :handleClick="setIsLogin"></Button>
+        <CldButton btnClass="red" label="Connexion" :handleClick="connexion"></CldButton>
+        <CldButton btnClass="mt-4 yellow" label="Se créer un compte" :handleClick="setIsLogin"></CldButton>
         </form>
       </div>
       <div class="cardForm mt-16" v-if="!isLogin">
@@ -26,15 +26,22 @@
             v-model="password"
             label="Mot de passe"
           ></v-text-field>
-        <Button btnClass="yellow" label="Inscription" :handleClick="inscription"></Button>
-        <Button btnClass="mt-4 red" label="Se connecter" :handleClick="setIsLogin"></Button>
+        <CldButton btnClass="yellow" label="Inscription" :handleClick="inscription"></CldButton>
+        <CldButton btnClass="mt-4 red" label="Se connecter" :handleClick="setIsLogin"></CldButton>
         </form>
       </div>
     </div>
   </div>
 </template>
-<script lang="ts" setup>
-import Button from '../components/Button'
+
+<script lang="ts">
+export default {
+  name: "Login"
+}
+</script>
+
+<script setup lang="ts">
+import CldButton from "@/components/CldButton.vue";
 import {ref} from "vue";
 import router from "@/router";
 import {UserRequest} from "@/request/UserRequest";

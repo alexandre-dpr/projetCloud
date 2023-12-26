@@ -18,25 +18,31 @@
   </div>
 </template>
 <script lang="ts" setup>
-import Button from '../components/Button.vue'
+import Button from '../components/CldButton.vue'
 import router from "@/router";
 import {onBeforeMount, ref} from "vue";
 import {GameRequest} from "@/request/GameRequest";
 import {jwtDecode} from "jwt-decode";
+import {Salon} from "@/interface/Salon";
 
-const salon = ref([]);
+const salon = ref<Array<Salon>>([]);
 const gameRequest = new GameRequest();
-const tokenDecode :any = jwtDecode(localStorage.getItem("token"));
+const tokenDecode: any = ref("")
 
 
 onBeforeMount(async () => {
+  const token = localStorage.getItem("token")
+  if (token) {
+    tokenDecode.value = jwtDecode(token)
+  }
+
   const response: any = await gameRequest.getSalons()
   const data = response.data
   for (const id in data) {
     if (Object.hasOwnProperty.call(data, id)) {
       const arrayData = data[id];
       if (arrayData.length <2) {
-        const json = {
+        const json: Salon = {
           "id": id,
           "joueur": arrayData[0]
         }
