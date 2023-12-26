@@ -28,26 +28,14 @@ public class AppController {
      * @return
      */
     @PostMapping("/partie/{idPartie}/coup")
-    public ResponseEntity<?> jouerCoup(@PathVariable UUID idPartie, @RequestBody CoupDTO coupDTO){
-        try {
+    public ResponseEntity<?> jouerCoup(@PathVariable String idPartie, @RequestBody CoupDTO coupDTO) throws CoupNonAutoriseException, PartieInexistanceException, MauvaisTourException, MauvaisesCoordonneesExcpetion, PartieTermineException {
             facade.jouerCoup(idPartie, coupDTO);
             return ResponseEntity.ok().build();
-        } catch (MauvaisesCoordonneesExcpetion e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Coordonnées invalides");
-        } catch (CoupNonAutoriseException e) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Coup non autorisé");
-        } catch (PartieInexistanceException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Partie introuvable");
-        } catch (MauvaisTourException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Mauvais tour de jeu");
-        } catch (PartieTermineException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("La partie est déjà terminée");
-        }
     }
 
 
     @GetMapping("/partie/{idPartie}")
-    public ResponseEntity<?> getPartie(@PathVariable UUID idPartie) {
+    public ResponseEntity<?> getPartie(@PathVariable String idPartie) {
         try {
             return ResponseEntity.ok(facade.getPartie(idPartie));
         } catch (PartieInexistanceException e) {
@@ -56,7 +44,7 @@ public class AppController {
     }
 
     @GetMapping("/partie")
-    public ResponseEntity<?> creerPartie(@RequestParam UUID idPartie, @RequestParam ArrayList<String> listeJoueur) {
+    public ResponseEntity<?> creerPartie(@RequestParam String idPartie, @RequestParam ArrayList<String> listeJoueur) throws PartieAlreadyUsedException {
         return ResponseEntity.ok(facade.creerPartie(idPartie, listeJoueur));
     }
 
@@ -70,21 +58,13 @@ public class AppController {
     }
 
     @PostMapping("/salon/{idSalon}")
-    public ResponseEntity<?> rejoindreSalon(@PathVariable UUID idSalon, @RequestBody NomJoueur nomJoueur) {
-        try {
-            return ResponseEntity.ok(facade.rejoindreSalon(idSalon, nomJoueur));
-        } catch (TropDeJoueurException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Trop de joueurs dans le salon");
-        }
+    public ResponseEntity<?> rejoindreSalon(@PathVariable String idSalon, @RequestBody NomJoueur nomJoueur) throws TropDeJoueurException, SalonInexistantException {
+        return ResponseEntity.ok(facade.rejoindreSalon(idSalon, nomJoueur));
     }
 
     @GetMapping("/salon/{idSalon}")
-    public ResponseEntity<?> getSalon(@PathVariable UUID idSalon) {
-        try {
-            return ResponseEntity.ok(facade.getSalon(idSalon));
-        } catch (SalonInexistantException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Salon introuvable");
-        }
+    public ResponseEntity<?> getSalon(@PathVariable String idSalon) throws SalonInexistantException, PartieAlreadyUsedException {
+        return ResponseEntity.ok(facade.getSalon(idSalon));
     }
 
 }

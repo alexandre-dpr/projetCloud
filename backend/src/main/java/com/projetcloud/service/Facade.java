@@ -1,16 +1,17 @@
 package com.projetcloud.service;
 
 
+import com.projetcloud.dto.request.SalonDTO;
 import com.projetcloud.dto.response.CoupDTO;
 import com.projetcloud.dto.response.NomJoueur;
 import com.projetcloud.exceptions.*;
 import com.projetcloud.modele.Puissance4;
+import com.projetcloud.modele.Salon;
+import com.projetcloud.repository.Puissance4Repository;
+import com.projetcloud.repository.SalonRepository;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * {@inheritDoc}
@@ -18,84 +19,114 @@ import java.util.UUID;
 @Component
 public class Facade implements IFacade{
 
-    private Map<UUID,Puissance4> parties;
 
-    private Map<UUID, ArrayList<String>> salon;
+    private final Puissance4Repository puissance4Repository;
 
-    public Facade(){
-        this.parties = new HashMap<>();
-        this.salon = new HashMap<>();
+    private final SalonRepository salonRepository;
+
+
+
+    public Facade(Puissance4Repository puissance4Repository, SalonRepository salonRepository){
+        this.puissance4Repository = puissance4Repository;
+        this.salonRepository = salonRepository;
+
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Puissance4 jouerCoup(UUID idPartie, CoupDTO coupDTO) throws MauvaisesCoordonneesExcpetion, PartieInexistanceException, CoupNonAutoriseException, MauvaisTourException, PartieTermineException {
+    public Puissance4 jouerCoup(String idPartie, CoupDTO coupDTO) throws MauvaisesCoordonneesExcpetion, PartieInexistanceException, CoupNonAutoriseException, MauvaisTourException, PartieTermineException {
         if (coupDTO.getColonne()<0){
             throw new MauvaisesCoordonneesExcpetion();
         }
         Puissance4 partie = this.getPartie(idPartie);
         partie.jouerTour(coupDTO.getJoueur(), coupDTO.getColonne());
+        puissance4Repository.save(partie);
         return partie;
     }
 
     @Override
-    public Puissance4 creerPartie(UUID id, ArrayList<String> listeJoueur) {
-        Puissance4 nouvellePartie = new Puissance4(listeJoueur);
-        parties.put(id, nouvellePartie);
+    public Puissance4 creerPartie(String id, ArrayList<String> listeJoueur) throws PartieAlreadyUsedException {
+        Optional<Puissance4> puissance4 = puissance4Repository.findById(id);
+        if (puissance4.isPresent()){
+            throw new PartieAlreadyUsedException("Partie existante");
+        }
+        Puissance4 nouvellePartie = new Puissance4(id,listeJoueur);
+        puissance4Repository.save(nouvellePartie);
         return nouvellePartie;
     }
 
    @Override
-    public Puissance4 getPartie(UUID idPartie) throws PartieInexistanceException{
-        try {
-            return this.parties.get(idPartie);
-        }catch (Exception e){
-            throw new PartieInexistanceException();
-        }
+    public Puissance4 getPartie(String idPartie) throws PartieInexistanceException{
+       Optional<Puissance4> puissance4 = puissance4Repository.findById(idPartie);
+       if (!puissance4.isPresent()){
+           throw new PartieInexistanceException("Partie Inexistante");
+       }
+       return puissance4.get();
     }
 
     @Override
-    public UUID creerSalon(String pseudo) {
-        UUID idUnique = UUID.randomUUID();
-        ArrayList<String> joueurs = new ArrayList<>();
-        joueurs.add(pseudo);
-        salon.put(idUnique,joueurs);
-        return idUnique;
+    public String creerSalon(String pseudo) {
+        Salon salon1= new Salon();
+        salon1.getListeJoueur().add(pseudo);
+        salonRepository.save(salon1);
+
+        return salon1.getId();
     }
 
 
 
     @Override
-    public UUID rejoindreSalon(UUID idSalon, NomJoueur pseudoJoueur) throws TropDeJoueurException {
-        if (salon.get(idSalon).size() < 2) {
-            salon.get(idSalon).add(pseudoJoueur.getUsername());
-        }else {
-            throw new TropDeJoueurException();
+    public String rejoindreSalon(String idSalon, NomJoueur pseudoJoueur) throws TropDeJoueurException, SalonInexistantException {
+        Optional<Salon> salon = salonRepository.findById(idSalon);
+        if (!salon.isPresent()){
+            throw new SalonInexistantException("Salon inexistant");
         }
+        if (salon.get().getListeJoueur().size() >= 2) {
+            throw new TropDeJoueurException("Trop de joueur");
+        }
+        salon.get().getListeJoueur().add(pseudoJoueur.getUsername());
+        salonRepository.save(salon.get());
         return idSalon;
     }
 
+
     @Override
-    public boolean getSalon(UUID idSalon) throws SalonInexistantException{
-        try {
-            ArrayList<String> joueurs = this.salon.get(idSalon);
-            if (joueurs.size() == 2){
-                if (!parties.containsKey(idSalon)){
-                    Puissance4 nouvellePartie = new Puissance4(salon.get(idSalon));
-                    parties.put(idSalon,nouvellePartie);
-                }
-                return true;
-            }
-            return false;
-        }catch (Exception e){
-            throw new SalonInexistantException();
+    public boolean getSalon(String idSalon) throws SalonInexistantException, PartieAlreadyUsedException {
+        Optional<Salon> salon = salonRepository.findById(idSalon);
+        if (!salon.isPresent()) {
+           throw new SalonInexistantException("Salon inexistant");
         }
+        ArrayList<String> joueurs = salon.get().getListeJoueur();
+        System.out.println(joueurs);
+        if (joueurs.size() == 2){
+            Optional<Puissance4> puissance4 = puissance4Repository.findById(idSalon);
+            if (!puissance4.isPresent()){
+                throw new PartieAlreadyUsedException("Partie existante");
+            }
+            Puissance4 nouvellePartie = new Puissance4(idSalon,joueurs);
+            puissance4Repository.save(nouvellePartie);
+            salonRepository.delete(salon.get());
+            return true;
+        }
+        return false;
+
     }
     @Override
-    public Map<UUID, ArrayList<String>> getSalons() throws SalonInexistantException{
-            return this.salon;
+    public ArrayList<SalonDTO> getSalons() throws SalonInexistantException{
+        List<Salon> salons= salonRepository.findAll();
+        if (salons.isEmpty()){
+            throw new SalonInexistantException("Aucun salon");
+        }
+        ArrayList<SalonDTO> salonDTOS = new ArrayList<>();
+        salons.forEach(salon1 -> {
+            SalonDTO salonDTO = new SalonDTO();
+            salonDTO.setId(salon1.getId());
+            salonDTO.setListeJoueur(salon1.getListeJoueur());
+            salonDTOS.add(salonDTO);
+        });
+        return salonDTOS;
     }
 
 

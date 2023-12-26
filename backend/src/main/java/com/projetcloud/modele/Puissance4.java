@@ -6,9 +6,10 @@ import com.projetcloud.exceptions.PartieTermineException;
 
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.UUID;
 
 public class Puissance4 {
-
+    private String id;
     private final int HAUTEUR_GRILLE = 6;
     private final int LARGEUR_GRILLE = 7;
 
@@ -18,11 +19,12 @@ public class Puissance4 {
     private boolean isPartieTerminee;
     private String winner;
 
-    public Puissance4(ArrayList<String> joueurs) {
+    public Puissance4(String id, ArrayList<String> joueurs) {
         this.joueurs = joueurs;
         this.numTour = 1;
         this.isPartieTerminee = false;
         initGrille();
+        this.id = id;
     }
 
     private void initGrille() {
@@ -279,6 +281,10 @@ public class Puissance4 {
 
     public String getWinner() {
         return winner;
+    }
+
+    public String getId() {
+        return id;
     }
 
     /**
