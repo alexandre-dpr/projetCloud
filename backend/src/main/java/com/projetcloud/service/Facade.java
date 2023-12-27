@@ -52,14 +52,15 @@ public class Facade implements IFacade{
         if (puissance4.isPresent()){
             throw new PartieAlreadyUsedException("Partie existante");
         }
-        Puissance4 nouvellePartie = new Puissance4(id,listeJoueur);
+        Puissance4 nouvellePartie = new Puissance4(listeJoueur);
+        nouvellePartie.setId(id);
         puissance4Repository.save(nouvellePartie);
         return nouvellePartie;
     }
 
    @Override
     public Puissance4 getPartie(String idPartie) throws PartieInexistanceException{
-       Optional<Puissance4> puissance4 = puissance4Repository.findById(idPartie);
+       Optional<Puissance4> puissance4 = puissance4Repository.findById(idPartie+"salon");
        if (!puissance4.isPresent()){
            throw new PartieInexistanceException("Partie Inexistante");
        }
@@ -68,7 +69,7 @@ public class Facade implements IFacade{
 
     @Override
     public String creerSalon(String pseudo) {
-        Salon salon1= new Salon();
+        Salon salon1= new Salon(UUID.randomUUID().toString());
         salon1.getListeJoueur().add(pseudo);
         salonRepository.save(salon1);
 
@@ -80,6 +81,7 @@ public class Facade implements IFacade{
     @Override
     public String rejoindreSalon(String idSalon, NomJoueur pseudoJoueur) throws TropDeJoueurException, SalonInexistantException {
         Optional<Salon> salon = salonRepository.findById(idSalon);
+        System.out.println(pseudoJoueur.getUsername());
         if (!salon.isPresent()){
             throw new SalonInexistantException("Salon inexistant");
         }
@@ -94,20 +96,25 @@ public class Facade implements IFacade{
 
     @Override
     public boolean getSalon(String idSalon) throws SalonInexistantException, PartieAlreadyUsedException {
+        System.out.println(idSalon);
         Optional<Salon> salon = salonRepository.findById(idSalon);
+        System.out.println("test");
         if (!salon.isPresent()) {
            throw new SalonInexistantException("Salon inexistant");
         }
         ArrayList<String> joueurs = salon.get().getListeJoueur();
         System.out.println(joueurs);
         if (joueurs.size() == 2){
-            Optional<Puissance4> puissance4 = puissance4Repository.findById(idSalon);
-            if (!puissance4.isPresent()){
-                throw new PartieAlreadyUsedException("Partie existante");
+            System.out.println("test2");
+            Optional<Puissance4> puissance4 = puissance4Repository.findById(idSalon+"salon");
+            System.out.println("test3");
+            if (puissance4.isPresent()){
+                return true;
             }
-            Puissance4 nouvellePartie = new Puissance4(idSalon,joueurs);
+            Puissance4 nouvellePartie = new Puissance4(joueurs);
+            nouvellePartie.setId(idSalon+"salon");
             puissance4Repository.save(nouvellePartie);
-            salonRepository.delete(salon.get());
+
             return true;
         }
         return false;
@@ -119,6 +126,8 @@ public class Facade implements IFacade{
         if (salons.isEmpty()){
             throw new SalonInexistantException("Aucun salon");
         }
+        List<Puissance4> puissance4 = puissance4Repository.findAll();
+        System.out.println(puissance4);
         ArrayList<SalonDTO> salonDTOS = new ArrayList<>();
         salons.forEach(salon1 -> {
             SalonDTO salonDTO = new SalonDTO();

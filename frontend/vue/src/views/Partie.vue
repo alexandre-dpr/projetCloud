@@ -3,12 +3,15 @@
     <div class="d-flex flex-column align-center">
       <h1 class="text-white ">Puissance 4</h1>
       <div v-if="isFull">
-      <div class="d-flex justify-space-between">
-        <div class="d-flex justify-center align-center flex-column">
+      <div class="d-flex justify-space-between align-center mt-16">
+        <div class="card-border mr-3">
+          <div class="card-inside">
           <p>{{listeJoueur[0]}}</p>
           <p>Couleur: Rouge</p>
         </div>
-      <div class="container-board mt-16">
+        </div>
+
+        <div class="container-board">
         <div class="board">
           <div class="cell" v-for="(row, rowIndex) in board" :key="rowIndex">
             <div class="slot" v-for="(col, colIndex) in row" :key="colIndex" @click="dropPiece(colIndex)">
@@ -17,18 +20,32 @@
           </div>
         </div>
       </div>
-        <div class="d-flex justify-center align-center flex-column">
-          <p>{{listeJoueur[1]}}</p>
-          <p>Couleur: Jaune</p>
-        </div>
+          <div class="card-border ml-3">
+            <div class="card-inside">
+              <p>{{listeJoueur[1]}}</p>
+              <p>Couleur: Jaune</p>
+            </div>
+          </div>
       </div>
         <div v-if="partieTerminee">
-          <p>WINNER ISSSSSS {{winner}}</p>
-          <button>Revenir à l'accueil</button>
+          <div class="d-flex flex-column mt-3">
+
+
+          <div class="card-border">
+            <div class="card-inside">
+          <p>Le gagnant est : {{winner}}</p>
+            </div>
+          </div>
+          <button @click="retourSalon" class="btn mt-3">Revenir à l'accueil</button>
         </div>
       </div>
+      </div>
       <div v-if="!isFull">
+        <div class="card-border">
+          <div class="card-inside">
         <p>En attente</p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -40,6 +57,7 @@ import {onMounted, onUnmounted, ref} from "vue";
 import {GameRequest} from "@/request/GameRequest";
 import {useRouter} from "vue-router";
 import {jwtDecode} from "jwt-decode";
+import router from "@/router";
 
 const isFull = ref(false);
 const partieTerminee = ref(false)
@@ -107,6 +125,11 @@ async function dropPiece(colIndex :any) {
 
 }
 
+
+function retourSalon(){
+  router.push({ name: 'menu' });
+}
+
 </script>
 
 <style scoped>
@@ -127,6 +150,35 @@ async function dropPiece(colIndex :any) {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.btn{
+  border: 5px solid white;
+  box-shadow: 6px 6px 12px black;
+  border-radius: 8px;
+  padding: 5px;
+  color: white;
+}
+.card-border{
+  background-color: white;
+  width: auto;
+  height: auto;
+  padding: 5px;
+  border-radius: 8px;
+  box-shadow: 6px 6px 12px black;
+}
+.card-inside{
+  background-color: royalblue;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+  color: white;
+  padding: 5px;
+
 }
 
 .cell {

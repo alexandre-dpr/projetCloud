@@ -3,28 +3,39 @@ package com.projetcloud.modele;
 import com.projetcloud.exceptions.CoupNonAutoriseException;
 import com.projetcloud.exceptions.MauvaisTourException;
 import com.projetcloud.exceptions.PartieTermineException;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.data.annotation.Id;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Objects;
-import java.util.UUID;
 
-public class Puissance4 {
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+public class Puissance4 implements Serializable {
+
+    @Id
     private String id;
-    private final int HAUTEUR_GRILLE = 6;
-    private final int LARGEUR_GRILLE = 7;
+    private  int HAUTEUR_GRILLE = 6;
+    private  int LARGEUR_GRILLE = 7;
 
     private ArrayList<ArrayList<CouleurPion>> matrice;
-    private final ArrayList<String> joueurs;
+    private ArrayList<String> joueurs = new ArrayList<>();
     private int numTour;
     private boolean isPartieTerminee;
     private String winner;
 
-    public Puissance4(String id, ArrayList<String> joueurs) {
+    public Puissance4(ArrayList<String> joueurs) {
         this.joueurs = joueurs;
         this.numTour = 1;
         this.isPartieTerminee = false;
         initGrille();
-        this.id = id;
+
     }
 
     private void initGrille() {
@@ -32,11 +43,20 @@ public class Puissance4 {
 
         for (int i = 0; i < HAUTEUR_GRILLE; i++) {
             ArrayList<CouleurPion> ligne = new ArrayList<>();
-
             for (int j = 0; j < LARGEUR_GRILLE; j++) {
                 ligne.add(null);
             }
 
+            matrice.add(ligne);
+        }
+
+        this.matrice = matrice;
+    }
+    private void initGrille2() {
+        ArrayList<ArrayList<CouleurPion>> matrice = new ArrayList<>();
+
+        for (int i = 0; i < HAUTEUR_GRILLE; i++) {
+            ArrayList<CouleurPion> ligne = new ArrayList<>();
             matrice.add(ligne);
         }
 
@@ -255,37 +275,7 @@ public class Puissance4 {
         return null;
     }
 
-    public int getHAUTEUR_GRILLE() {
-        return HAUTEUR_GRILLE;
-    }
 
-    public int getLARGEUR_GRILLE() {
-        return LARGEUR_GRILLE;
-    }
-
-    public ArrayList<ArrayList<CouleurPion>> getMatrice() {
-        return matrice;
-    }
-
-    public ArrayList<String> getJoueurs() {
-        return joueurs;
-    }
-
-    public int getNumTour() {
-        return numTour;
-    }
-
-    public boolean isPartieTerminee() {
-        return isPartieTerminee;
-    }
-
-    public String getWinner() {
-        return winner;
-    }
-
-    public String getId() {
-        return id;
-    }
 
     /**
      * Méthode pour debug

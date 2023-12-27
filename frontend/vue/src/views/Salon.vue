@@ -27,7 +27,8 @@ import {Salon} from "@/interface/Salon";
 
 const salon = ref<Array<Salon>>([]);
 const gameRequest = new GameRequest();
-const tokenDecode: any = ref("")
+const token : any =localStorage.getItem("token")
+const tokenDecode :any = jwtDecode(token);
 
 
 onBeforeMount(async () => {
@@ -35,22 +36,16 @@ onBeforeMount(async () => {
   if (token) {
     tokenDecode.value = jwtDecode(token)
   }
-
   const response: any = await gameRequest.getSalons()
   const data = response.data
-  for (const id in data) {
-    if (Object.hasOwnProperty.call(data, id)) {
-      const arrayData = data[id];
-      if (arrayData.length <2) {
-        const json: Salon = {
-          "id": id,
-          "joueur": arrayData[0]
-        }
-        salon.value.push(json);
-      }
+  data.forEach((item : any)=>{
+    console.log(item)
+    const json: Salon = {
+      "id": item.id,
+      "joueur": item.listeJoueur[0],
     }
-  }
-  console.log(salon)
+    salon.value.push(json);
+  })
 })
 
 function join(id : any){

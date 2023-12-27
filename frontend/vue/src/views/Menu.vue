@@ -46,7 +46,7 @@ function rejoindrePartie(){
   background-color: white;
   width: 30vw;
   height: 100px;
-  padding: 1vw;
+  padding: 5px;
   border-radius: 8px;
   box-shadow: 6px 6px 12px black;
 }

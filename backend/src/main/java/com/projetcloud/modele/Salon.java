@@ -7,9 +7,12 @@ public class Salon {
     private String id;
     private ArrayList<String> listeJoueur;
 
-    public Salon() {
+    public Salon(String id) {
         this.listeJoueur = new ArrayList<>();
-        this.id = UUID.randomUUID().toString();
+        this.id = id;
+    }
+    public Salon(){
+        this.listeJoueur = new ArrayList<>();
     }
 
     public String getId() {

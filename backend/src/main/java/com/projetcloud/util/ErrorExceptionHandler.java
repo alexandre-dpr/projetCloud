@@ -31,9 +31,9 @@ public class ErrorExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleAllExceptions(Exception ex, WebRequest request) {
-//        System.out.println(ex.getStackTrace()[0].getFileName());
-//        System.out.println(ex.getStackTrace()[0].getLineNumber());
-//        System.out.println(ex.getClass());
+        System.out.println(ex.getStackTrace()[0].getFileName());
+        System.out.println(ex.getStackTrace()[0].getLineNumber());
+        System.out.println(ex.getClass());
         ErrorDTO errorDTO = createDTO("Une erreur est survenue.", HttpStatus.BAD_REQUEST, ex, request);
         return handleExceptionInternal(ex, errorDTO, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
