@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("{api.version}/auth")
 public class AuthController {
 
     private final UserService userService;
@@ -23,12 +23,12 @@ public class AuthController {
         this.userService = userService;
     }
 
-    @PostMapping(value = "/login")
+    @PostMapping(value = "{api.version}/login")
     public ResponseEntity<String> login(@RequestBody UserDto req) throws BadLoginException {
         return ResponseEntity.ok(userService.login(req));
     }
 
-    @PostMapping(value = "/register")
+    @PostMapping(value = "{api.version}/register")
     public ResponseEntity<String> register(@RequestBody UserDto req) throws LoginAlreadyUsedException {
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.register(req));
     }
