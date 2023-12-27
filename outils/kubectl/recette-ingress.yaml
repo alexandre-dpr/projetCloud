@@ -3,6 +3,7 @@ kind: Ingress
 metadata:
   name: recette-ingress
 spec:
+  ingressClassName: nginx
   rules:
     - host: recette.groupe6.froissant.work
       http:
