@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("{api.version}/auth")
+@RequestMapping("${api.version}/auth")
 public class AuthController {
 
     private final UserService userService;

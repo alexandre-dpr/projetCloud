@@ -32,7 +32,7 @@ public class AppController {
     }
 
 
-    @GetMapping("{api.version}/partie/{idPartie}")
+    @GetMapping("${api.version}/partie/{idPartie}")
     public ResponseEntity<?> getPartie(@PathVariable String idPartie) {
         try {
             return ResponseEntity.ok(facade.getPartie(idPartie));
@@ -41,27 +41,27 @@ public class AppController {
         }
     }
 
-    @GetMapping("{api.version}/partie")
+    @GetMapping("${api.version}/partie")
     public ResponseEntity<?> creerPartie(@RequestParam String idPartie, @RequestParam ArrayList<String> listeJoueur) throws PartieAlreadyUsedException {
         return ResponseEntity.ok(facade.creerPartie(idPartie, listeJoueur));
     }
 
-    @PostMapping("{api.version}/salon")
+    @PostMapping("${api.version}/salon")
     public ResponseEntity<?> creerSalon(@RequestBody NomJoueur nomJoueur) {
         return ResponseEntity.ok(facade.creerSalon(nomJoueur.getUsername()));
     }
 
-    @GetMapping("{api.version}/salon")
+    @GetMapping("${api.version}/salon")
     public ResponseEntity<?> getSalon() throws SalonInexistantException {
         return ResponseEntity.ok(facade.getSalons());
     }
 
-    @PostMapping("{api.version}/salon/{idSalon}")
+    @PostMapping("${api.version}/salon/{idSalon}")
     public ResponseEntity<?> rejoindreSalon(@PathVariable String idSalon, @RequestBody NomJoueur nomJoueur) throws TropDeJoueurException, SalonInexistantException {
         return ResponseEntity.ok(facade.rejoindreSalon(idSalon, nomJoueur));
     }
 
-    @GetMapping("{api.version}/salon/{idSalon}")
+    @GetMapping("${api.version}/salon/{idSalon}")
     public ResponseEntity<?> getSalon(@PathVariable String idSalon) throws SalonInexistantException, PartieAlreadyUsedException {
         return ResponseEntity.ok(facade.getSalon(idSalon));
     }
