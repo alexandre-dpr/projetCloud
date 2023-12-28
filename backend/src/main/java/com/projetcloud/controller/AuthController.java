@@ -23,12 +23,12 @@ public class AuthController {
         this.userService = userService;
     }
 
-    @PostMapping(value = "{api.version}/login")
+    @PostMapping(value = "/login")
     public ResponseEntity<String> login(@RequestBody UserDto req) throws BadLoginException {
         return ResponseEntity.ok(userService.login(req));
     }
 
-    @PostMapping(value = "{api.version}/register")
+    @PostMapping(value = "/register")
     public ResponseEntity<String> register(@RequestBody UserDto req) throws LoginAlreadyUsedException {
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.register(req));
     }
