@@ -6,7 +6,7 @@
       <div class="d-flex justify-space-between align-center mt-16">
         <div class="card-border mr-3">
           <div class="card-inside">
-          <p>{{listeJoueur[0]}}</p>
+          <p>{{listeJoueur[0].username}}</p>
           <p>Couleur: Rouge</p>
         </div>
         </div>
@@ -22,7 +22,7 @@
       </div>
           <div class="card-border ml-3">
             <div class="card-inside">
-              <p>{{listeJoueur[1]}}</p>
+              <p>{{listeJoueur[1].username}}</p>
               <p>Couleur: Jaune</p>
             </div>
           </div>

@@ -4,13 +4,10 @@ import com.projetcloud.dto.response.CoupDTO;
 import com.projetcloud.dto.response.NomJoueur;
 import com.projetcloud.exceptions.*;
 import com.projetcloud.service.Facade;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.projetcloud.exceptions.JoueurInexistantException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.UUID;
 
 
 @RestController
@@ -28,7 +25,7 @@ public class AppController {
      * @return
      */
     @PostMapping("/partie/{idPartie}/coup")
-    public ResponseEntity<?> jouerCoup(@PathVariable String idPartie, @RequestBody CoupDTO coupDTO) throws CoupNonAutoriseException, PartieInexistanceException, MauvaisTourException, MauvaisesCoordonneesExcpetion, PartieTermineException {
+    public ResponseEntity<?> jouerCoup(@PathVariable String idPartie, @RequestBody CoupDTO coupDTO) throws CoupNonAutoriseException, PartieInexistanceException, MauvaisTourException, MauvaisesCoordonneesExcpetion, PartieTermineException, JoueurInexistantException {
             facade.jouerCoup(idPartie, coupDTO);
             return ResponseEntity.ok().build();
     }
@@ -43,13 +40,10 @@ public class AppController {
         }
     }
 
-    @GetMapping("/partie")
-    public ResponseEntity<?> creerPartie(@RequestParam String idPartie, @RequestParam ArrayList<String> listeJoueur) throws PartieAlreadyUsedException {
-        return ResponseEntity.ok(facade.creerPartie(idPartie, listeJoueur));
-    }
+
 
     @PostMapping("/salon")
-    public ResponseEntity<?> creerSalon(@RequestBody NomJoueur nomJoueur) {
+    public ResponseEntity<?> creerSalon(@RequestBody NomJoueur nomJoueur) throws JoueurInexistantException {
         return ResponseEntity.ok(facade.creerSalon(nomJoueur.getUsername()));
     }
     @GetMapping("/salon")
@@ -58,7 +52,7 @@ public class AppController {
     }
 
     @PostMapping("/salon/{idSalon}")
-    public ResponseEntity<?> rejoindreSalon(@PathVariable String idSalon, @RequestBody NomJoueur nomJoueur) throws TropDeJoueurException, SalonInexistantException {
+    public ResponseEntity<?> rejoindreSalon(@PathVariable String idSalon, @RequestBody NomJoueur nomJoueur) throws TropDeJoueurException, SalonInexistantException, JoueurInexistantException, DejaDansSalonException {
         return ResponseEntity.ok(facade.rejoindreSalon(idSalon, nomJoueur));
     }
 

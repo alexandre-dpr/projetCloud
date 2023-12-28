@@ -10,7 +10,7 @@
         </div>
         <div v-for="item in salon" :key="item.id" class="result">
           <div class="result-div"><p>{{ item.id }}</p></div>
-          <div class="result-div"><p>{{ item.joueur }}</p></div>
+          <div class="result-div"><p>{{ item.joueur.username }}</p></div>
           <div class="result-div"><Button btnClass="red" label="Rejoindre" @click="join(item.id)"></Button></div>
         </div>
       </div>

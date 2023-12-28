@@ -7,7 +7,6 @@ import com.projetcloud.exceptions.*;
 import com.projetcloud.modele.Puissance4;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 /**
  * Facade de l'application
@@ -21,15 +20,13 @@ public interface IFacade {
 
 
 
-    Puissance4 jouerCoup(String idPartie, CoupDTO coupDTO) throws MauvaisesCoordonneesExcpetion, PartieInexistanceException, CoupNonAutoriseException, MauvaisTourException, PartieTermineException;
-
-    Puissance4 creerPartie(String id, ArrayList<String> listeJoueur) throws PartieAlreadyUsedException;
+    Puissance4 jouerCoup(String idPartie, CoupDTO coupDTO) throws MauvaisesCoordonneesExcpetion, PartieInexistanceException, CoupNonAutoriseException, MauvaisTourException, PartieTermineException, JoueurInexistantException;
 
     Puissance4 getPartie(String idPartie) throws PartieInexistanceException;
 
-    String creerSalon(String pseudo);
+    String creerSalon(String pseudo) throws JoueurInexistantException;
 
-    String rejoindreSalon(String idSalon, NomJoueur pseudoJoueur) throws TropDeJoueurException, SalonInexistantException;
+    String rejoindreSalon(String idSalon, NomJoueur pseudoJoueur) throws TropDeJoueurException, SalonInexistantException, JoueurInexistantException, DejaDansSalonException;
 
     boolean getSalon(String idSalon) throws SalonInexistantException, PartieAlreadyUsedException;
 
