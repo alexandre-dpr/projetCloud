@@ -4,6 +4,7 @@ import com.projetcloud.exceptions.CoupNonAutoriseException;
 import com.projetcloud.exceptions.MauvaisTourException;
 import com.projetcloud.exceptions.PartieTermineException;
 import com.projetcloud.util.User;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,14 +22,22 @@ import java.util.Objects;
 public class Puissance4 implements Serializable {
 
     @Id
+    @Schema(description = "Id", example = "1")
     private String id;
+    @Schema(description = "Hauteur grille", example = "6")
     private  int HAUTEUR_GRILLE = 6;
+    @Schema(description = "Largeur grille", example = "7")
     private  int LARGEUR_GRILLE = 7;
 
+    @Schema(description = "Materice")
     private ArrayList<ArrayList<CouleurPion>> matrice;
+    @Schema(description = "Joueurs")
     private ArrayList<User> joueurs = new ArrayList<>();
+    @Schema(description = "NumTour", example = "1")
     private int numTour;
+    @Schema(description = "Partie terminee", example = "true")
     private boolean isPartieTerminee;
+    @Schema(description = "Vainqueur")
     private User winner;
 
     public Puissance4(ArrayList<User> joueurs) {

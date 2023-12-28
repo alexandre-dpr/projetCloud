@@ -16,9 +16,5 @@ public class ProjetCloudApplication {
         SpringApplication.run(ProjetCloudApplication.class, args);
 
     }
-    @Bean
-    public MongoTemplate mongoTemplate() {
-        // Vous pouvez personnaliser davantage la configuration ici si nécessaire
-        return new MongoTemplate(new SimpleMongoClientDatabaseFactory("mongodb+srv://projetCloud:qopjor-bygcut-5guvnY@projetcloud.kyhrlvv.mongodb.net/dbProjetCloud?retryWrites=true&w=majority"));
-    }
+
 }

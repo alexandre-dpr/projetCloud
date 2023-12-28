@@ -1,7 +1,11 @@
 package com.projetcloud.dto.response;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 public class CoupDTO{
+    @Schema(description = "Colonne", example = "1")
     private int colonne;
+    @Schema(description = "Joueur", example = "joueur1")
     private String joueur;
 
     public CoupDTO(int colonne, String joueur) {

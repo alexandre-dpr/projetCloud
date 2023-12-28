@@ -1,5 +1,6 @@
 package com.projetcloud.util;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
@@ -13,8 +14,12 @@ import java.util.List;
 @Getter
 @Setter
 public class User implements UserDetails {
+
+    @Schema(description = "Nom", example = "Joueur1")
     private String username;
+    @Schema(description = "Mot de passe", example = "password")
     private String password;
+    @Schema(description = "Roles")
     private List<Roles> roles;
 
     public User(String username, String password, List<Roles> roles) {

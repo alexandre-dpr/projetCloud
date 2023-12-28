@@ -10,7 +10,7 @@
         </div>
         <div v-for="item in salon" :key="item.id" class="result">
           <div class="result-div"><p>{{ item.id }}</p></div>
-          <div class="result-div"><p>{{ item.joueur.username }}</p></div>
+          <div class="result-div"><p>{{ item.joueur}}</p></div>
           <div class="result-div"><Button btnClass="red" label="Rejoindre" @click="join(item.id)"></Button></div>
         </div>
       </div>
@@ -38,11 +38,12 @@ onBeforeMount(async () => {
   }
   const response: any = await gameRequest.getSalons()
   const data = response.data
+  console.log(data)
   data.forEach((item : any)=>{
     console.log(item)
     const json: Salon = {
       "id": item.id,
-      "joueur": item.listeJoueur[0],
+      "joueur": item.listeJoueur[0].username,
     }
     salon.value.push(json);
   })

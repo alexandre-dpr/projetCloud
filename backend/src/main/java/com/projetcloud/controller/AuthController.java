@@ -1,6 +1,6 @@
 package com.projetcloud.controller;
 
-import com.projetcloud.dto.request.UserDto;
+import com.projetcloud.dto.request.UserDTO;
 import com.projetcloud.exceptions.BadLoginException;
 import com.projetcloud.exceptions.LoginAlreadyUsedException;
 import com.projetcloud.service.UserService;
@@ -24,12 +24,12 @@ public class AuthController {
     }
 
     @PostMapping(value = "/login")
-    public ResponseEntity<String> login(@RequestBody UserDto req) throws BadLoginException {
+    public ResponseEntity<String> login(@RequestBody UserDTO req) throws BadLoginException {
         return ResponseEntity.ok(userService.login(req));
     }
 
     @PostMapping(value = "/register")
-    public ResponseEntity<String> register(@RequestBody UserDto req) throws LoginAlreadyUsedException {
+    public ResponseEntity<String> register(@RequestBody UserDTO req) throws LoginAlreadyUsedException {
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.register(req));
     }
 }

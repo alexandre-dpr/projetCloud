@@ -1,6 +1,6 @@
 package com.projetcloud.service;
 
-import com.projetcloud.dto.request.UserDto;
+import com.projetcloud.dto.request.UserDTO;
 import com.projetcloud.exceptions.BadLoginException;
 import com.projetcloud.exceptions.LoginAlreadyUsedException;
 import com.projetcloud.repository.UserRepository;
@@ -30,7 +30,7 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public String login(UserDto utilisateur) throws BadLoginException {
+    public String login(UserDTO utilisateur) throws BadLoginException {
         Optional<User> user = userRepository.findByUsername(utilisateur.getUsername());
 
         if (user.isEmpty()) {
@@ -44,7 +44,7 @@ public class UserService {
         return jwtUtil.generateToken(user.get());
     }
 
-    public String register(UserDto utilisateur) throws LoginAlreadyUsedException {
+    public String register(UserDTO utilisateur) throws LoginAlreadyUsedException {
         Optional<User> user = userRepository.findByUsername(utilisateur.getUsername());
 
         if (user.isPresent()) {
