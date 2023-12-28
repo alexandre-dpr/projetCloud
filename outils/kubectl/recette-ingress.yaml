@@ -3,6 +3,7 @@ kind: Ingress
 metadata:
   name: recette-ingress
 spec:
+  ingressClassName: nginx
   rules:
     - host: recette.groupe6.froissant.work
       http:
@@ -14,10 +15,7 @@ spec:
                 name: frontend-service
                 port:
                   number: 80
-    - host: recette-api.groupe6.froissant.work
-      http:
-        paths:
-          - path: /
+          - path: /api/
             pathType: Prefix
             backend:
               service:

@@ -1,2 +1,7 @@
-package com.projetcloud.service;public class DejaDansSalonException {
+package com.projetcloud.exceptions;
+
+public class DejaDansSalonException extends Exception {
+    public DejaDansSalonException(String message) {
+        super(message);
+    }
 }
