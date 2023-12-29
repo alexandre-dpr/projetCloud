@@ -1,0 +1,4 @@
+apiVersion: v2
+name: ingress-chart
+description: Helm chart for the ingress service
+version: 1.0.0

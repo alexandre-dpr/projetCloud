@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: backend-deployment
 spec:
-  replicas: 1
+  replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
       app: backend
@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: backend-container
-          image: ghcr.io/cripsoo/projetcloud/backend-recette:1.0.0
+          image: {{ .Values.image.repository }}{{ .Values.environment }}:{{ .Values.image.tag }}
           ports:
             - containerPort: 8080
       imagePullSecrets:
