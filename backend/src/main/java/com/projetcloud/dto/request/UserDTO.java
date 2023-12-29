@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UserDto {
+public class UserDTO {
 
     @Schema(description = "Username", example = "username")
     private String username;

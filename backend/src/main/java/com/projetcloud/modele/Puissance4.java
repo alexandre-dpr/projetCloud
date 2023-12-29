@@ -3,6 +3,8 @@ package com.projetcloud.modele;
 import com.projetcloud.exceptions.CoupNonAutoriseException;
 import com.projetcloud.exceptions.MauvaisTourException;
 import com.projetcloud.exceptions.PartieTermineException;
+import com.projetcloud.util.User;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,17 +22,25 @@ import java.util.Objects;
 public class Puissance4 implements Serializable {
 
     @Id
+    @Schema(description = "Id", example = "1")
     private String id;
+    @Schema(description = "Hauteur grille", example = "6")
     private  int HAUTEUR_GRILLE = 6;
+    @Schema(description = "Largeur grille", example = "7")
     private  int LARGEUR_GRILLE = 7;
 
+    @Schema(description = "Materice")
     private ArrayList<ArrayList<CouleurPion>> matrice;
-    private ArrayList<String> joueurs = new ArrayList<>();
+    @Schema(description = "Joueurs")
+    private ArrayList<User> joueurs = new ArrayList<>();
+    @Schema(description = "NumTour", example = "1")
     private int numTour;
+    @Schema(description = "Partie terminee", example = "true")
     private boolean isPartieTerminee;
-    private String winner;
+    @Schema(description = "Vainqueur")
+    private User winner;
 
-    public Puissance4(ArrayList<String> joueurs) {
+    public Puissance4(ArrayList<User> joueurs) {
         this.joueurs = joueurs;
         this.numTour = 1;
         this.isPartieTerminee = false;
@@ -52,16 +62,7 @@ public class Puissance4 implements Serializable {
 
         this.matrice = matrice;
     }
-    private void initGrille2() {
-        ArrayList<ArrayList<CouleurPion>> matrice = new ArrayList<>();
 
-        for (int i = 0; i < HAUTEUR_GRILLE; i++) {
-            ArrayList<CouleurPion> ligne = new ArrayList<>();
-            matrice.add(ligne);
-        }
-
-        this.matrice = matrice;
-    }
 
     /**
      * Méthode pour jouer un coup
@@ -71,11 +72,10 @@ public class Puissance4 implements Serializable {
      * @throws CoupNonAutoriseException Le coup n'est pas autorisé
      * @throws PartieTermineException La partie est terminée.
      */
-    public void jouerTour(String joueur, int colonne) throws MauvaisTourException, CoupNonAutoriseException, PartieTermineException {
+    public void jouerTour(User joueur, int colonne) throws MauvaisTourException, CoupNonAutoriseException, PartieTermineException {
         if (!this.isPartieTerminee) {
-            if (joueur.equals(getJoueurActuel())) {
+            if (joueur.getUsername().equals((getJoueurActuel().getUsername()))) {
                 if (colonne >= 0 && colonne < LARGEUR_GRILLE && getTopLigne(colonne) != -1) {
-
                     int numLigne = getTopLigne(colonne);
                     ArrayList<CouleurPion> ligne = matrice.get(numLigne);
                     ligne.set(colonne, getCouleurCourante());
@@ -116,7 +116,7 @@ public class Puissance4 implements Serializable {
         return numTour % 2 == 0 ? CouleurPion.JAUNE : CouleurPion.ROUGE;
     }
 
-    private String getJoueurActuel() {
+    private User getJoueurActuel() {
         return joueurs.get((numTour + 1) % 2);
     }
 

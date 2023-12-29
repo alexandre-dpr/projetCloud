@@ -6,8 +6,8 @@
       <div class="d-flex justify-space-between align-center mt-16">
         <div class="card-border mr-3">
           <div class="card-inside">
-          <p>{{listeJoueur[0]}}</p>
-          <p>Couleur: Rouge</p>
+            <p>{{ joueur1 ? joueur1.username : "N/A" }}</p>
+            <p>Couleur: Rouge</p>
         </div>
         </div>
 
@@ -22,15 +22,13 @@
       </div>
           <div class="card-border ml-3">
             <div class="card-inside">
-              <p>{{listeJoueur[1]}}</p>
+              <p>{{ joueur2 ? joueur2.username : "N/A" }}</p>
               <p>Couleur: Jaune</p>
             </div>
           </div>
       </div>
         <div v-if="partieTerminee">
           <div class="d-flex flex-column mt-3">
-
-
           <div class="card-border">
             <div class="card-inside">
           <p>Le gagnant est : {{winner}}</p>
@@ -58,10 +56,13 @@ import {GameRequest} from "@/request/GameRequest";
 import {useRouter} from "vue-router";
 import {jwtDecode} from "jwt-decode";
 import router from "@/router";
+import {Joueur} from "@/interface/Joueur";
 
 const isFull = ref(false);
 const partieTerminee = ref(false)
-const listeJoueur = ref([])
+const joueur1 = ref<Joueur>();
+const joueur2 = ref<Joueur>();
+
 const winner = ref("")
 
 const gameRequest = new GameRequest();
@@ -88,8 +89,9 @@ const getJeu = setInterval(async () => {
   } else {
     const response : any = await gameRequest.getPartie(route.currentRoute.value.params.id)
     console.log(response)
+    joueur1.value = response.joueurs[0].username;
+    joueur2.value = response.joueurs[2].username;
 
-      listeJoueur.value = response.joueurs;
       for (var i = 0; i < response.matrice.length; i++) {
         for (var j = 0; j < response.matrice[i].length; j++) {
           if (response.matrice[i][j] !== null) {

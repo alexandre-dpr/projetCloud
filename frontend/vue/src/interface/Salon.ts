@@ -1,4 +1,5 @@
+
 export interface Salon {
-  "id": string,
-  "joueur": string
+  id: number;
+  joueur: string;
 }

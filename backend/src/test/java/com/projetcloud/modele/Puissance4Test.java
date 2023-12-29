@@ -3,20 +3,25 @@ package com.projetcloud.modele;
 import com.projetcloud.exceptions.CoupNonAutoriseException;
 import com.projetcloud.exceptions.MauvaisTourException;
 import com.projetcloud.exceptions.PartieTermineException;
+import com.projetcloud.util.User;
 import org.junit.Assert;
 import org.junit.Test;
 
+import javax.management.relation.Role;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class Puissance4Test {
+    private final List<User.Roles> role = new ArrayList<>(Arrays.asList(User.Roles.ROLE_USER));
+    private final User joueur1 = new User("damien","password", role);
+    private final User joueur2 = new User("alexandre","password", role);
 
-    private final String joueur1 = "joueur1";
-    private final String joueur2 = "joueur2";
-    private final ArrayList<String> joueurs = new ArrayList<>(Arrays.asList(joueur1, joueur2));
+    private final ArrayList<User> joueurs = new ArrayList<>(Arrays.asList(joueur1,joueur2));
 
     @Test
     public void jouerTour_WIN_COL_OK() throws CoupNonAutoriseException, MauvaisTourException, PartieTermineException {
+        System.out.println(joueurs);
         Puissance4 partie = new Puissance4(joueurs);
         partie.jouerTour(joueur1, 0);
         partie.jouerTour(joueur2, 1);
