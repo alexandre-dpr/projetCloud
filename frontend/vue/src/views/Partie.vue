@@ -1,47 +1,57 @@
 <template>
+  <div v-if="notification !== undefined && notification.length === 0" class=" d-flex justify-center w-100 bg-red h-auto pa-3">
+      <p>{{ notification }}</p>
+  </div>
   <div class="background-menu">
     <div class="d-flex flex-column align-center">
       <h1 class="text-white ">Puissance 4</h1>
       <div v-if="isFull">
-      <div class="d-flex justify-space-between align-center mt-16">
-        <div class="card-border mr-3">
-          <div class="card-inside">
-            <p>{{ joueur1 ? joueur1.username : "N/A" }}</p>
-            <p>Couleur: Rouge</p>
-        </div>
-        </div>
-
-        <div class="container-board">
-        <div class="board">
-          <div class="cell" v-for="(row, rowIndex) in board" :key="rowIndex">
-            <div class="slot" v-for="(col, colIndex) in row" :key="colIndex" @click="dropPiece(colIndex)">
-              <div class="piece" :class="getPieceClass(col, rowIndex)"></div>
+        <div class="d-flex justify-space-between align-center mt-16">
+          <div class="card-border mr-3">
+            <div class="card-inside">
+              <p>{{ joueur1 ? joueur1 : "N/A" }}</p>
+              <p>Couleur: Rouge</p>
             </div>
           </div>
-        </div>
-      </div>
+          <div class="d-flex flex-column">
+            <div class="card-border mb-3">
+              <div class="card-inside">
+                <p>Au tour de:</p>
+                <p>{{ joueurTour }}</p>
+              </div>
+            </div>
+            <div class="container-board">
+              <div class="board">
+                <div class="cell" v-for="(row, rowIndex) in board" :key="rowIndex">
+                  <div class="slot" v-for="(col, colIndex) in row" :key="colIndex" @click="dropPiece(colIndex)">
+                    <div class="piece" :class="getPieceClass(col, rowIndex)"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
           <div class="card-border ml-3">
             <div class="card-inside">
-              <p>{{ joueur2 ? joueur2.username : "N/A" }}</p>
+              <p>{{ joueur2 ? joueur2 : "N/A" }}</p>
               <p>Couleur: Jaune</p>
             </div>
           </div>
-      </div>
+        </div>
         <div v-if="partieTerminee">
           <div class="d-flex flex-column mt-3">
-          <div class="card-border">
-            <div class="card-inside">
-          <p>Le gagnant est : {{winner}}</p>
+            <div class="card-border">
+              <div class="card-inside">
+                <p v-if="winner !== null">Le gagnant est : {{ winner }}</p>
+              </div>
             </div>
+            <button @click="retourSalon" class="btn mt-3">Revenir à l'accueil</button>
           </div>
-          <button @click="retourSalon" class="btn mt-3">Revenir à l'accueil</button>
         </div>
-      </div>
       </div>
       <div v-if="!isFull">
         <div class="card-border">
           <div class="card-inside">
-        <p>En attente</p>
+            <p>En attente</p>
           </div>
         </div>
       </div>
@@ -51,24 +61,27 @@
 
 <script lang="ts" setup>
 
-import {onMounted, onUnmounted, ref} from "vue";
-import {GameRequest} from "@/request/GameRequest";
-import {useRouter} from "vue-router";
-import {jwtDecode} from "jwt-decode";
+import { onMounted, onUnmounted, ref } from "vue";
+import { GameRequest } from "@/request/GameRequest";
+import { useRouter } from "vue-router";
+import { jwtDecode } from "jwt-decode";
 import router from "@/router";
-import {Joueur} from "@/interface/Joueur";
+import { Joueur } from "@/interface/Joueur";
+import {AxiosError} from "axios";
+
 
 const isFull = ref(false);
 const partieTerminee = ref(false)
 const joueur1 = ref<Joueur>();
 const joueur2 = ref<Joueur>();
-
-const winner = ref("")
+const winner = ref<Joueur>()
+const joueurTour = ref<Joueur>();
+const notification = ref<String>("");
 
 const gameRequest = new GameRequest();
-var route :any  =  useRouter();
-const token : any =localStorage.getItem("token")
-const tokenDecode :any = jwtDecode(token);
+var route: any = useRouter();
+const token: any = localStorage.getItem("token")
+const tokenDecode: any = jwtDecode(token);
 
 var board = ref([
   [null, null, null, null, null, null, null],
@@ -81,16 +94,24 @@ var board = ref([
 
 const getJeu = setInterval(async () => {
   if (!isFull.value) {
-    const response: any = await gameRequest.getSalon(route.currentRoute.value.params.id);
-    console.log(response)
-    if (response) {
-      isFull.value = true;
-    }
+    try {
+    let response: any = await gameRequest.getSalon(route.currentRoute.value.params.id);
+      if (response) {
+        isFull.value = true;
+      }
+    }catch (e : any) {
+    notification.value = e.response.data.errorMessage
+    setTimeout(() => {
+      notification.value= "";
+    }, 2000);
+  }
+
   } else {
-    const response : any = await gameRequest.getPartie(route.currentRoute.value.params.id)
-    console.log(response)
-    joueur1.value = response.joueurs[0].username;
-    joueur2.value = response.joueurs[2].username;
+    try {
+      const response: any = await gameRequest.getPartie(route.currentRoute.value.params.id)
+      joueur1.value = response.joueurs[0].username;
+      joueur2.value = response.joueurs[1].username;
+      joueurTour.value = response.numTour % 2 === 0 ? joueur2.value : joueur1.value;
 
       for (var i = 0; i < response.matrice.length; i++) {
         for (var j = 0; j < response.matrice[i].length; j++) {
@@ -100,47 +121,59 @@ const getJeu = setInterval(async () => {
         }
       }
 
-      winner.value = response.winner;
+      winner.value = response.winner !== null ? response.winner.username : null;
       partieTerminee.value = response.partieTerminee
-
-    console.log(board.value)
-
+    }catch (e : any) {
+      notification.value = e.response.data.errorMessage
+      setTimeout(() => {
+        notification.value= "";
+      }, 2000);
+    }
   }
-} ,1000)
+}, 1000)
 
-const getPieceClass = (value :any, index :any) => {
+const getPieceClass = (value: any, index: any) => {
   return value === "ROUGE" ? `red-piece drop-${index}` : value === "JAUNE" ? `yellow-piece drop-${index}` : "";
 }
 
 
-onUnmounted(()=>{
+onUnmounted(() => {
   clearInterval(getJeu);
 })
 
 
-async function dropPiece(colIndex :any) {
+async function dropPiece(colIndex: any) {
   if (!partieTerminee.value) {
 
-
-    await gameRequest.jouerCoup(route.currentRoute.value.params.id, colIndex, tokenDecode.sub);
-  }
+    try {
+      await gameRequest.jouerCoup(route.currentRoute.value.params.id, colIndex, tokenDecode.sub);
+    }catch (e : any) {
+      notification.value = e.response.data.errorMessage
+      setTimeout(() => {
+        notification.value= "";
+      }, 2000);
+    }
+    }
 
 }
 
 
-function retourSalon(){
+
+
+function retourSalon() {
   router.push({ name: 'menu' });
 }
 
 </script>
 
 <style scoped>
-.background-menu{
+.background-menu {
   height: 100vh;
   width: 100vw;
   background-color: royalblue;
 }
-.container-board{
+
+.container-board {
   width: auto;
   height: auto;
   padding: 10px;
@@ -148,20 +181,22 @@ function retourSalon(){
   border-radius: 8px;
   border: 2px solid black;
 }
+
 .board {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.btn{
+.btn {
   border: 5px solid white;
   box-shadow: 6px 6px 12px black;
   border-radius: 8px;
   padding: 5px;
   color: white;
 }
-.card-border{
+
+.card-border {
   background-color: white;
   width: auto;
   height: auto;
@@ -169,7 +204,8 @@ function retourSalon(){
   border-radius: 8px;
   box-shadow: 6px 6px 12px black;
 }
-.card-inside{
+
+.card-inside {
   background-color: royalblue;
   height: 100%;
   width: 100%;
@@ -359,4 +395,5 @@ function retourSalon(){
   100% {
     transform: translateY(0);
   }
-}</style>
+}
+</style>
