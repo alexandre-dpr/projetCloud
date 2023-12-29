@@ -2,6 +2,8 @@
 
 Projet d'appli cloud, M2-DevOps
 
+[![Etat Build](https://github.com/cripsoo/projetCloud/actions/workflows/buildRecette.yml/badge.svg)](https://github.com/cripsoo/projetCloud/actions/workflows/buildRecette.yml)
+
 ## Démarrage
 
 Le projet inclut des images docker pour faire entièrement tourner le projet en dev, ainsi qu'un conteneur d'outils avec Azure CLI, kubectl etc ... Il suffit de suivre l'installation suivante.
