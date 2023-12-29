@@ -5,8 +5,6 @@ services:
     container_name: outils
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./kubectl/:/kubectl/
+      - ./terraform:/terraform/
     stdin_open: true
     tty: true
-    ports:
-      - "3000:3000"

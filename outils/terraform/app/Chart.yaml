@@ -1,0 +1,14 @@
+apiVersion: v2
+name: projetCloud-chart
+description: Helm chart for the projetCloud app
+version: 1.0.0
+dependencies:
+  - name: backend-chart
+    version: 1.0.0
+    repository: "file://backend"
+  - name: frontend-chart
+    version: 1.0.0
+    repository: "file://frontend"
+  - name: ingress-chart
+    version: 1.0.0
+    repository: "file://ingress"

@@ -53,4 +53,4 @@ RUN curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/s
 RUN chmod 700 get_helm.sh
 RUN ./get_helm.sh
 
-WORKDIR /app
+WORKDIR /

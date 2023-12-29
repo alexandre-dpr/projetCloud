@@ -1,0 +1,7 @@
+/.terraform.lock.hcl
+/kubeconfig
+/terraform.tfstate
+/.terraform/
+/app/charts/
+/app/Chart.lock
+/terraform.tfstate.backup
