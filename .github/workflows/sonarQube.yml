@@ -1,0 +1,40 @@
+name: SonarQube Scan
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  sonarqube:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up JDK
+      uses: actions/setup-java@v2
+      with:
+        distribution: 'adopt'
+        java-version: '11'
+
+    - name: Build and analyze backend
+      run: |
+        ./mvnw clean verify sonar:sonar -Dsonar.projectKey=my-backend -Dsonar.host.url=https://your-sonarqube-instance -Dsonar.login=$SONAR_TOKEN
+      working-directory: backend
+
+    - name: Install Node.js and npm
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+
+    - name: Install dependencies and build front
+      run: |
+        npm install
+        npm run build
+      working-directory: frontend
+
+    - name: Analyze front with SonarQube
+      run: sonar-scanner -Dsonar.projectKey=my-frontend -Dsonar.sources=src -Dsonar.host.url=https://your-sonarqube-instance -Dsonar.login=$SONAR_TOKEN
+      working-directory: frontend
