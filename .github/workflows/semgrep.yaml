@@ -1,40 +1,27 @@
-name: YourWorkflowName
+name: Semgrep Analysis
 
 on:
   push:
     branches:
-      - "*"  # Exécuter à chaque push sur n'importe quelle branche
-  pull_request:
-    branches:
-      - "develop"
+      - develop
 
 jobs:
-  - job: Semgrep
-    displayName: Semgrep scan
-    pool: TheAdoAgentPoolName
-    timeoutInMinutes: 10
-    workspace:
-      clean: all
-
-    variables:
-      ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
-        fetchDepth: 0
-      ${{ else }}:
-        fetchDepth: 1
+  semgrep:
+    runs-on: ubuntu-latest
 
     steps:
-      - checkout: self
-        clean: true
-        fetchDepth: ${{ variables.fetchDepth }}
+      - name: Checkout Repository
+        uses: actions/checkout@v2
 
-      - script: python3 -m pip install semgrep
-        displayName: Install semgrep
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.x
 
-      - script: |
-          targetBranchCommitId=$(git rev-parse origin/$SYSTEM_PULLREQUEST_TARGETBRANCHNAME)
-          semgrep scan --config=auto --error --time --verbose --baseline-commit $targetBranchCommitId
-        condition: and(succeeded(), eq(variables['Build.Reason'], 'PullRequest'))
-        displayName: Pull request scan
-      - script: semgrep scan --config=auto --error --time --verbose
-        condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
-        displayName: Full scan
+      - name: Install Semgrep
+        run: |
+          python -m pip install semgrep
+
+      - name: Run Semgrep
+        run: |
+          semgrep --config=semgrep.yml
