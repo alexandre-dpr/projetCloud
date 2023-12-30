@@ -1,0 +1,9 @@
+rules:
+  - id: python.security.insecure-crypto
+    languages:
+      - python
+    message: "Insecure use of cryptography in Python"
+    patterns:
+      - pattern: |
+          import hashlib
+          hashlib.md5()
