@@ -23,7 +23,6 @@ jobs:
         uses: azure/CLI@v1
         with:
           azcliversion: 2.30.0
-          useGlobalConfig: true
           inlineScript: |
             az login --user ${{ secrets.AZURE_LOGIN }} --password ${{ secrets.AZURE_PASSWORD }}
 
@@ -50,9 +49,9 @@ jobs:
 
       - name: Test install az
         run: |
-          az version
+          sudo az version
 
       - name: Appliquer Terraform
         run: |
           cd $GITHUB_WORKSPACE/outils/terraform
-          terraform apply -var="githubToken=${{ secrets.GITHUB_TOKEN }}" -var="env_name=${{ github.event.inputs.environment }}" -auto-approve
+          sudo terraform apply -var="githubToken=${{ secrets.GITHUB_TOKEN }}" -var="env_name=${{ github.event.inputs.environment }}" -auto-approve
