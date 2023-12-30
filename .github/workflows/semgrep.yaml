@@ -30,3 +30,11 @@ jobs:
         run: |
           semgrep --config=semgrep.yaml backend/
           semgrep --config=semgrep.yaml frontend/
+
+      - name: Check Semgrep Results
+        run: |
+          if [ -e semgrep_results.json ]; then
+            cat semgrep_results.json
+          else
+            echo "Semgrep did not generate any results."
+          fi
