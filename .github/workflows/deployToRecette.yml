@@ -47,13 +47,8 @@ jobs:
           cd $GITHUB_WORKSPACE/outils/terraform
           terraform init
 
-      - name: Test install az
-        run: |
-          sudo az version
-          sudo az login --user ${{ secrets.AZURE_LOGIN }} --password ${{ secrets.AZURE_PASSWORD }}
-          sudo az account show
-
       - name: Appliquer Terraform
         run: |
+          sudo az login --user ${{ secrets.AZURE_LOGIN }} --password ${{ secrets.AZURE_PASSWORD }}
           cd $GITHUB_WORKSPACE/outils/terraform
           sudo terraform apply -var="githubToken=${{ secrets.GITHUB_TOKEN }}" -var="env_name=${{ github.event.inputs.environment }}" -auto-approve
