@@ -1,0 +1,52 @@
+name: Deploy to Env
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environnement'
+        required: true
+        default: 'recette'
+        options:
+          - recette
+          - prod
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout du code
+        uses: actions/checkout@v2
+
+      - name: Connexion Azure
+        uses: azure/CLI@v1
+        with:
+          azcliversion: 2.55.0
+          inlineScript: az login --user ${{ secrets.AZURE_LOGIN }} --password ${{ secrets.AZURE_PASSWORD }}
+
+      - name: Installer kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: '1.28.4'
+
+      - name: Installer Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: '3.13.1'
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.6.5
+
+      - name: Initialisation Terraform
+        run: |
+          cd $GITHUB_WORKSPACE/outils/terraform
+          terraform init
+
+      - name: Appliquer Terraform
+        run: |
+          cd $GITHUB_WORKSPACE/outils/terraform
+          terraform apply -target=module.${{ github.event.inputs.environment }}_cluster -var="githubToken=${{ secrets.GITHUB_TOKEN }}" -auto-approve
