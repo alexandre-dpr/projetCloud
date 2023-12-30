@@ -1,5 +1,7 @@
 rules:
   - id: vue-xss
+    languages:
+      - javascript
     patterns:
       - pattern: |
           this.$http.get("/api/data?input=" + userProvidedInput)
@@ -7,6 +9,4 @@ rules:
               this.data = response.data;
             });
     message: "Potential Cross-Site Scripting (XSS) vulnerability in Vue.js application."
-
-  # Ajoutez d'autres règles pour votre frontend ici...
 
