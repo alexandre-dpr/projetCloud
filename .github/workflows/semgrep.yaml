@@ -29,7 +29,7 @@ jobs:
       - name: Run Semgrep
         run: |
           semgrep --config=semgrep.yaml backend/
-          semgrep --config=semgrep.yaml frontend/
+          semgrep --config=semgrepfront.yaml frontend/
 
       - name: Check Semgrep Results
         run: |
