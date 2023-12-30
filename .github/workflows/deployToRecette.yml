@@ -50,6 +50,7 @@ jobs:
       - name: Test install az
         run: |
           sudo az version
+          sudo az account show
 
       - name: Appliquer Terraform
         run: |
