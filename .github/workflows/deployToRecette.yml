@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
     inputs:
       environment:
-        description: 'Environnement'
+        type: choice
+        description: "Choisir l'environnement"
         required: true
-        default: 'recette'
         options:
           - recette
           - prod
