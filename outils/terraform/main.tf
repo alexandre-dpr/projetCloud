@@ -73,10 +73,4 @@ resource "null_resource" "helm_local" {
     # Installation de l'Ingress nginx
     command = "helm install nginx-ingress nginx-stable/nginx-ingress --set rbac.create=true"
   }
-
-  # Procédure de destruction
-  provisioner "local-exec" {
-    when    = destroy
-    command = "kubectl delete secret cloud-secret"
-  }
 }
