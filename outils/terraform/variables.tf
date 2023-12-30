@@ -9,8 +9,8 @@ variable "cluster_name" {
 }
 
 variable "env_name" {
+  type        = string
   description = "The environment for the AKS cluster"
-  default     = "recette"
 }
 
 variable "githubToken" {
