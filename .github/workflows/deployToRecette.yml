@@ -23,7 +23,9 @@ jobs:
         uses: azure/CLI@v1
         with:
           azcliversion: 2.55.0
-          inlineScript: az login --user ${{ secrets.AZURE_LOGIN }} --password ${{ secrets.AZURE_PASSWORD }}
+          inlineScript: |
+            az upgrade --yes
+            az login --user ${{ secrets.AZURE_LOGIN }} --password ${{ secrets.AZURE_PASSWORD }}
 
       - name: Installer kubectl
         uses: azure/setup-kubectl@v3
@@ -49,4 +51,4 @@ jobs:
       - name: Appliquer Terraform
         run: |
           cd $GITHUB_WORKSPACE/outils/terraform
-          terraform apply -target=module.${{ github.event.inputs.environment }}_cluster -var="githubToken=${{ secrets.GITHUB_TOKEN }}" -auto-approve
+          terraform apply -var="githubToken=${{ secrets.GITHUB_TOKEN }}" -var="env_name=${{ github.event.inputs.environment }}" -auto-approve
