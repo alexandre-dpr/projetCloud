@@ -44,8 +44,9 @@ jobs:
 
       - name: Initialisation Terraform
         run: |
+          sudo az login --user ${{ secrets.AZURE_LOGIN }} --password ${{ secrets.AZURE_PASSWORD }}
           cd $GITHUB_WORKSPACE/outils/terraform
-          terraform init -backend-config=configs/${{ github.event.inputs.environment }}.conf
+          sudo terraform init -backend-config=configs/${{ github.event.inputs.environment }}.conf
 
       - name: Appliquer Terraform
         run: |
