@@ -50,7 +50,7 @@ jobs:
       - name: Test install az
         run: |
           sudo az version
-          az login --user ${{ secrets.AZURE_LOGIN }} --password ${{ secrets.AZURE_PASSWORD }}
+          sudo az login --user ${{ secrets.AZURE_LOGIN }} --password ${{ secrets.AZURE_PASSWORD }}
           sudo az account show
 
       - name: Appliquer Terraform
