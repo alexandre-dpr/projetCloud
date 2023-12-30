@@ -21,6 +21,10 @@ jobs:
 
       - name: Connexion Azure
         uses: azure/CLI@v1
+        with:
+          azcliversion: 2.55.0
+          inlineScript: |
+            az login --user ${{ secrets.AZURE_LOGIN }} --password ${{ secrets.AZURE_PASSWORD }}
 
       - name: Installer kubectl
         uses: azure/setup-kubectl@v3
