@@ -1,9 +1,11 @@
 name: SonarQube Scan
 
 on:
+  workflow_dispatch:
   push:
-    branches:
-      - main
+    branches: ["develop"]
+  pull_request:
+    branches: ["develop"]
 
 jobs:
   sonarqube:
