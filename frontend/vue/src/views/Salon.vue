@@ -1,4 +1,7 @@
 <template>
+  <div v-if="notification !== undefined && notification.length === 0" class=" d-flex justify-center w-100 bg-red h-auto pa-3">
+    <p>{{ notification }}</p>
+  </div>
   <div class="background-menu">
     <div class="d-flex flex-column align-center">
       <h1 class="text-white ">Puissance 4</h1>
@@ -24,34 +27,51 @@ import {onBeforeMount, ref} from "vue";
 import {GameRequest} from "@/request/GameRequest";
 import {jwtDecode} from "jwt-decode";
 import {Salon} from "@/interface/Salon";
+import {AxiosError} from "axios";
 
 const salon = ref<Array<Salon>>([]);
 const gameRequest = new GameRequest();
 const token : any =localStorage.getItem("token")
 const tokenDecode :any = jwtDecode(token);
+const notification = ref<String>();
 
 
 onBeforeMount(async () => {
-  const token = localStorage.getItem("token")
-  if (token) {
-    tokenDecode.value = jwtDecode(token)
-  }
-  const response: any = await gameRequest.getSalons()
-  const data = response.data
-  console.log(data)
-  data.forEach((item : any)=>{
-    console.log(item)
-    const json: Salon = {
-      "id": item.id,
-      "joueur": item.listeJoueur[0].username,
+  try {
+    const token = localStorage.getItem("token")
+    if (token) {
+      tokenDecode.value = jwtDecode(token)
     }
-    salon.value.push(json);
+    const response: any = await gameRequest.getSalons()
+    const data = response.data
+    console.log(data)
+    data.forEach((item : any)=>{
+      console.log(item)
+      const json: Salon = {
+        "id": item.id,
+        "joueur": item.listeJoueur[0].username,
+      }
+      salon.value.push(json);
   })
+  }catch (e : any ) {
+    notification.value = e.response.data.errorMessage
+    setTimeout(() => {
+      notification.value= "";
+    }, 2000);
+  }
 })
 
+
 function join(id : any){
+  try {
   const response : any = gameRequest.joinSalon(id,tokenDecode.sub);
   router.push({ name: 'partie', params: { id: id } })
+  }catch (e : any) {
+    notification.value = e.response.data.errorMessage
+    setTimeout(() => {
+      notification.value= "";
+    }, 2000);
+  }
 }
 
 

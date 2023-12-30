@@ -1,8 +1,7 @@
 package com.projetcloud.util;
 
 import com.projetcloud.dto.response.ErrorDTO;
-import com.projetcloud.exceptions.BadLoginException;
-import com.projetcloud.exceptions.LoginAlreadyUsedException;
+import com.projetcloud.exceptions.*;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,13 +18,63 @@ public class ErrorExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(LoginAlreadyUsedException.class)
     public ResponseEntity<Object> handleLoginAlreadyUsedException(Exception ex, WebRequest request) {
-        ErrorDTO errorDTO = createDTO("Login is already used", HttpStatus.CONFLICT, ex, request);
+        ErrorDTO errorDTO = createDTO("L'identifiant est déjà prit", HttpStatus.CONFLICT, ex, request);
         return handleExceptionInternal(ex, errorDTO, new HttpHeaders(), HttpStatus.valueOf(errorDTO.getStatus()), request);
     }
 
     @ExceptionHandler(BadLoginException.class)
     public ResponseEntity<Object> handleBadLoginException(Exception ex, WebRequest request) {
-        ErrorDTO errorDTO = createDTO("Incorrect login", HttpStatus.UNAUTHORIZED, ex, request);
+        ErrorDTO errorDTO = createDTO("Identifiant incorrecte", HttpStatus.UNAUTHORIZED, ex, request);
+        return handleExceptionInternal(ex, errorDTO, new HttpHeaders(), HttpStatus.valueOf(errorDTO.getStatus()), request);
+    }
+
+    @ExceptionHandler(JoueurInexistantException.class)
+    public ResponseEntity<Object> JoueurInexistantException(Exception ex, WebRequest request) {
+        ErrorDTO errorDTO = createDTO("Le joueur n'a pas été trouvé", HttpStatus.NOT_FOUND, ex, request);
+        return handleExceptionInternal(ex, errorDTO, new HttpHeaders(), HttpStatus.valueOf(errorDTO.getStatus()), request);
+    }
+
+    @ExceptionHandler(PartieInexistanceException.class)
+    public ResponseEntity<Object> PartieInexistanceException(Exception ex, WebRequest request) {
+        ErrorDTO errorDTO = createDTO("La partie n'a pas été trouvé", HttpStatus.NOT_FOUND, ex, request);
+        return handleExceptionInternal(ex, errorDTO, new HttpHeaders(), HttpStatus.valueOf(errorDTO.getStatus()), request);
+    }
+
+    @ExceptionHandler(SalonInexistantException.class)
+    public ResponseEntity<Object> SalonInexistantException(Exception ex, WebRequest request) {
+        ErrorDTO errorDTO = createDTO("Le salon n'a pas été trouvé", HttpStatus.NOT_FOUND, ex, request);
+        return handleExceptionInternal(ex, errorDTO, new HttpHeaders(), HttpStatus.valueOf(errorDTO.getStatus()), request);
+    }
+
+    @ExceptionHandler(DejaDansSalonException.class)
+    public ResponseEntity<Object> DejaDansSalonException(Exception ex, WebRequest request) {
+        ErrorDTO errorDTO = createDTO("Déjà dans le salon", HttpStatus.NOT_FOUND, ex, request);
+        return handleExceptionInternal(ex, errorDTO, new HttpHeaders(), HttpStatus.valueOf(errorDTO.getStatus()), request);
+    }
+
+    @ExceptionHandler(TropDeJoueurException.class)
+    public ResponseEntity<Object> TropDeJoueurException(Exception ex, WebRequest request) {
+        ErrorDTO errorDTO = createDTO("Il y a trop de joueurs pour cette partie", HttpStatus.CONFLICT, ex, request);
+        return handleExceptionInternal(ex, errorDTO, new HttpHeaders(), HttpStatus.valueOf(errorDTO.getStatus()), request);
+    }
+    @ExceptionHandler(PartieTermineException.class)
+    public ResponseEntity<Object> PartieTermineException(Exception ex, WebRequest request) {
+        ErrorDTO errorDTO = createDTO("La partie est fini", HttpStatus.CONFLICT, ex, request);
+        return handleExceptionInternal(ex, errorDTO, new HttpHeaders(), HttpStatus.valueOf(errorDTO.getStatus()), request);
+    }
+    @ExceptionHandler(MauvaisesCoordonneesExcpetion.class)
+    public ResponseEntity<Object> MauvaisesCoordonneesExcpetion(Exception ex, WebRequest request) {
+        ErrorDTO errorDTO = createDTO("Coordonnées invalides", HttpStatus.UNAUTHORIZED, ex, request);
+        return handleExceptionInternal(ex, errorDTO, new HttpHeaders(), HttpStatus.valueOf(errorDTO.getStatus()), request);
+    }
+    @ExceptionHandler(MauvaisTourException.class)
+    public ResponseEntity<Object> MauvaisTourException(Exception ex, WebRequest request) {
+        ErrorDTO errorDTO = createDTO("Pas votre tour", HttpStatus.UNAUTHORIZED, ex, request);
+        return handleExceptionInternal(ex, errorDTO, new HttpHeaders(), HttpStatus.valueOf(errorDTO.getStatus()), request);
+    }
+    @ExceptionHandler(CoupNonAutoriseException.class)
+    public ResponseEntity<Object> CoupNonAutoriseException(Exception ex, WebRequest request) {
+        ErrorDTO errorDTO = createDTO("Coup non authorisé", HttpStatus.UNAUTHORIZED, ex, request);
         return handleExceptionInternal(ex, errorDTO, new HttpHeaders(), HttpStatus.valueOf(errorDTO.getStatus()), request);
     }
 

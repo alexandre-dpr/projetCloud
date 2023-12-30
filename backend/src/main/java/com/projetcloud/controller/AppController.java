@@ -48,7 +48,9 @@ public class AppController {
     @Operation(summary = "Créé un salon")
     @PostMapping("${api.version}/salon")
     public ResponseEntity<String> creerSalon(@RequestBody NomJoueur nomJoueur) throws JoueurInexistantException {
-        return ResponseEntity.ok(facade.creerSalon(nomJoueur.getUsername()));
+
+            return ResponseEntity.ok(facade.creerSalon(nomJoueur.getUsername()));
+
     }
 
     @Operation(summary = "Récupère tous les salons")

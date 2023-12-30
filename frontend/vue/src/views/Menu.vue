@@ -3,13 +3,13 @@
     <div class="d-flex flex-column align-center">
       <h1 class="text-white ">Puissance 4</h1>
       <div class="card-border mt-16">
-        <div class="card-inside">
-          <p @click="creerPartie" class="text-white">Créer une partie</p>
+        <div  @click="creerPartie" class="card-inside">
+          <p  class="text-white">Créer une partie</p>
         </div>
       </div>
       <div class="card-border mt-16">
-        <div class="card-inside">
-          <p @click="rejoindrePartie" class="text-white">Rejoindre une partie</p>
+        <div @click="rejoindrePartie" class="card-inside">
+          <p  class="text-white">Rejoindre une partie</p>
         </div>
       </div>
     </div>

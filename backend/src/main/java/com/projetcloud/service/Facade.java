@@ -72,9 +72,9 @@ public class Facade implements IFacade{
         if(!user.isPresent()){
             throw new JoueurInexistantException("Joueur inexistant");
         }
+        getSalonByUser(user);
         salon1.getListeJoueur().add(user.get());
         salonRepository.save(salon1);
-
         return salon1.getId();
     }
 
@@ -92,11 +92,12 @@ public class Facade implements IFacade{
         }
         Optional<User> user = userRepository.findByUsername(pseudoJoueur.getUsername());
         if(!user.isPresent()){
-            throw new JoueurInexistantException("Joueur inexistant");
+            return idSalon;
         }
         if (user.get().getUsername().equals(salon.get().getListeJoueur().get(0).getUsername())){
             throw new DejaDansSalonException("Déjà dans le salon");
         }
+        getSalonByUser(user);
         salon.get().getListeJoueur().add(user.get());
         salonRepository.save(salon.get());
         return idSalon;
@@ -141,6 +142,17 @@ public class Facade implements IFacade{
             salonDTOS.add(salonDTO);
         });
         return salonDTOS;
+    }
+
+    private void getSalonByUser(Optional<User> user) {
+        List<Salon> salons = salonRepository.findByListeJoueur(user.get().getUsername());
+        List<Puissance4> parties = puissance4Repository.findByJoueurs(user.get().getUsername());
+        if (!salons.isEmpty()){
+            salonRepository.deleteAll(salons);
+        }
+        if (!parties.isEmpty()){
+            puissance4Repository.deleteAll(parties);
+        }
     }
 
 

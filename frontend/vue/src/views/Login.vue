@@ -1,4 +1,7 @@
 <template>
+  <div v-if="notification !== undefined && notification.length === 0" class=" d-flex justify-center w-100 bg-red h-auto pa-3">
+    <p>{{ notification }}</p>
+  </div>
   <div class="background-menu">
     <div class="d-flex flex-column align-center">
       <h1 class="text-white ">Puissance 4</h1>
@@ -9,6 +12,7 @@
             label="pseudo"
           ></v-text-field>
           <v-text-field
+            type="password"
             v-model="password"
             label="Mot de passe"
           ></v-text-field>
@@ -23,6 +27,7 @@
           label="Pseudo">
           </v-text-field>
           <v-text-field
+            type="password"
             v-model="password"
             label="Mot de passe"
           ></v-text-field>
@@ -45,12 +50,15 @@ import CldButton from "@/components/CldButton.vue";
 import {ref} from "vue";
 import router from "@/router";
 import {UserRequest} from "@/request/UserRequest";
+import {AxiosError} from "axios";
 
 
 var isLogin = ref(true);
 var password = ref('');
 var pseudo = ref('');
 var request = new UserRequest();
+const notification = ref<String>();
+
 
 
 function setIsLogin(){
@@ -58,19 +66,32 @@ function setIsLogin(){
 }
 
 async function connexion(){
-  const resp = await request.login(pseudo.value,password.value)
-  if (resp.status === 200){
-    localStorage.setItem("token",resp.data);
-    router.push("menu")
+  try {
+    const resp = await request.login(pseudo.value,password.value)
+    if (resp.status === 200){
+      localStorage.setItem("token",resp.data);
+      router.push("menu")
+    }
+  }catch (e : any) {
+    notification.value = e.response.data.errorMessage
+    setTimeout(() => {
+      notification.value= "";
+    }, 2000);
   }
 }
 async function inscription(){
-  const resp = await request.register(pseudo.value,password.value)
-  console.log(resp)
-  if (resp.status === 201){
-    localStorage.setItem("token",resp.data);
-    router.push('menu');
-
+  try {
+    const resp = await request.register(pseudo.value,password.value)
+    console.log(resp)
+    if (resp.status === 201){
+      localStorage.setItem("token",resp.data);
+      router.push('menu');
+  }
+  }catch (e : any) {
+    notification.value = e.response.data.errorMessage
+    setTimeout(() => {
+      notification.value= "";
+    }, 2000);
   }
 }
 </script>
