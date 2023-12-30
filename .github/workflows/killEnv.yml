@@ -1,0 +1,55 @@
+name: Kill Env
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        type: choice
+        description: "Choisir l'environnement à détruire"
+        required: true
+        options:
+          - recette
+          - prod
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout du code
+        uses: actions/checkout@v2
+
+      - name: Connexion Azure
+        uses: azure/CLI@v1
+        with:
+          azcliversion: 2.55.0
+          inlineScript: |
+            az login --user ${{ secrets.AZURE_LOGIN }} --password ${{ secrets.AZURE_PASSWORD }}
+
+      - name: Installer kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: 'v1.28.4'
+
+      - name: Installer Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: 'v3.13.1'
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.6.5
+
+      - name: Initialisation Terraform
+        run: |
+          sudo az login --user ${{ secrets.AZURE_LOGIN }} --password ${{ secrets.AZURE_PASSWORD }}
+          cd $GITHUB_WORKSPACE/outils/terraform
+          sudo terraform init -backend-config=configs/${{ github.event.inputs.environment }}.conf
+
+      - name: Appliquer Terraform
+        run: |
+          sudo az login --user ${{ secrets.AZURE_LOGIN }} --password ${{ secrets.AZURE_PASSWORD }}
+          cd $GITHUB_WORKSPACE/outils/terraform
+          sudo terraform destroy -var="githubToken=${{ secrets.GITHUB_TOKEN }}" -var="env_name=${{ github.event.inputs.environment }}" -auto-approve
