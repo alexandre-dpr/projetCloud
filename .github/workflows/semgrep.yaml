@@ -1,11 +1,12 @@
-trigger: none
+name: YourWorkflowName
 
 on:
   push:
-    branches: ["develop"]
+    branches:
+      - "*"  # Exécuter à chaque push sur n'importe quelle branche
   pull_request:
-    branches: ["develop"]
-
+    branches:
+      - "develop"
 
 jobs:
   - job: Semgrep
