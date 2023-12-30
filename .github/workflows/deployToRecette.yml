@@ -27,6 +27,9 @@ jobs:
             az upgrade --yes
             az login --user ${{ secrets.AZURE_LOGIN }} --password ${{ secrets.AZURE_PASSWORD }}
 
+      - name: Redémarrer l'Agent
+        run: sudo systemctl restart github-runner
+
       - name: Installer kubectl
         uses: azure/setup-kubectl@v3
         with:
