@@ -22,7 +22,7 @@ jobs:
       - name: Connexion Azure
         uses: azure/CLI@v1
         with:
-          azcliversion: 2.0.79
+          azcliversion: 2.30.0
           useGlobalConfig: true
           inlineScript: |
             az login --user ${{ secrets.AZURE_LOGIN }} --password ${{ secrets.AZURE_PASSWORD }}
@@ -47,6 +47,10 @@ jobs:
         run: |
           cd $GITHUB_WORKSPACE/outils/terraform
           terraform init
+
+      - name: Test install az
+        run: |
+          az version
 
       - name: Appliquer Terraform
         run: |
