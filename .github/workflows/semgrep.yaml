@@ -28,4 +28,4 @@ jobs:
 
       - name: Run Semgrep
         run: |
-          semgrep --config=semgrep.yml
+          semgrep --config=semgrep.yaml
