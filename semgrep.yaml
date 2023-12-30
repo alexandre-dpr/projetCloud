@@ -2,6 +2,7 @@ rules:
   - id: python.security.insecure-crypto
     languages:
       - python
+    severity: warning  # Ajoutez cette ligne pour spécifier la gravité de la règle
     message: "Insecure use of cryptography in Python"
     patterns:
       - pattern: |
