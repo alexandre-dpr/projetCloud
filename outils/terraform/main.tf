@@ -7,12 +7,7 @@ terraform {
   }
 
   # Gestion du stockage du tfstate
-  backend "azurerm" {
-    resource_group_name   = "${var.projectName}-${var.env_name}-stockage"
-    storage_account_name   = "stockage"
-    container_name         = "tfstate"
-    key                    = "terraform.tfstate"
-  }
+  backend "azurerm" {}
 }
 
 provider "azurerm" {
