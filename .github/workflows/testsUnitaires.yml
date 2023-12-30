@@ -1,6 +1,7 @@
 name: Tests-Unitaires-Backend
 
 on:
+  workflow_dispatch:
 #  push:
 #    branches: ["develop"]
 #  pull_request:
