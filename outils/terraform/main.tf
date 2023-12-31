@@ -49,6 +49,24 @@ resource "null_resource" "helm_local" {
     command = "kubectl create secret docker-registry cloud-secret --docker-server=https://ghcr.io/ --docker-username=notneeded --docker-password=${var.githubToken}"
   }
 
+## Installation de cert-manager
+  provisioner "local-exec" {
+    command = "kubectl create namespace cert-manager"
+  }
+
+  provisioner "local-exec" {
+    command = "helm repo add jetstack https://charts.jetstack.io"
+  }
+
+  provisioner "local-exec" {
+    command = "helm repo update"
+  }
+
+  provisioner "local-exec" {
+    command = "helm install cert-manager jetstack/cert-manager --namespace cert-manager --version v1.1.1"
+  }
+## Fin installation de cert-manager
+
   provisioner "local-exec" {
     # Build du chart Helm local
     command = "helm dependency build ${var.helm_folder}"
