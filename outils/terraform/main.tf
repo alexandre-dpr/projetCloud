@@ -63,7 +63,7 @@ resource "null_resource" "helm_local" {
   }
 
   provisioner "local-exec" {
-    command = "helm install cert-manager jetstack/cert-manager --namespace cert-manager --version v1.1.1"
+    command = "helm install cert-manager jetstack/cert-manager --namespace cert-manager --version v1.1.1 --set installCRDs=true"
   }
 ## Fin installation de cert-manager
 
