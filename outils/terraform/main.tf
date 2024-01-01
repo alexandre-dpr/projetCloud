@@ -91,9 +91,4 @@ resource "null_resource" "helm_local" {
     # Installation de l'Ingress nginx
     command = "helm install nginx-ingress nginx-stable/nginx-ingress --set rbac.create=true"
   }
-
-  provisioner "local-exec" {
-    # Création du secret tls
-    command = "kubectl create secret tls secret-tls --key configs/${var.env_name}/private.key --cert configs/${var.env_name}/certificate.crt"
-  }
 }
