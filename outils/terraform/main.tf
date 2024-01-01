@@ -79,7 +79,7 @@ resource "null_resource" "helm_local" {
 
   provisioner "local-exec" {
     # Ajout du repo Helm nginx-stable
-    command = "helm repo add nginx-stable https://helm.nginx.com/stable"
+    command = "helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx"
   }
 
   provisioner "local-exec" {
