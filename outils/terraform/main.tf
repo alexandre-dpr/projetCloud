@@ -89,6 +89,6 @@ resource "null_resource" "helm_local" {
 
   provisioner "local-exec" {
     # Installation de l'Ingress nginx
-    command = "helm install nginx-ingress nginx-stable/nginx-ingress --set rbac.create=true"
+    command = "helm upgrade --install ingress-nginx ingress-nginx --repo https://kubernetes.github.io/ingress-nginx"
   }
 }
