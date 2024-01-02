@@ -85,6 +85,6 @@ resource "null_resource" "helm_local" {
 
   provisioner "local-exec" {
     # Installation de l'Ingress nginx
-    command = "helm install ingress-controller ingress-nginx/ingress-nginx"
+    command = "helm install ingress-controller ingress-nginx/ingress-nginx --set controller.nodeSelector.\"beta\\.kubernetes\\.io/os\"=linux --set defaultBackend.nodeSelector.\"beta\\.kubernetes\\.io/os\"=linux --set controller.service.type=LoadBalancer --set controller.service.externalTrafficPolicy=Local"
   }
 }
