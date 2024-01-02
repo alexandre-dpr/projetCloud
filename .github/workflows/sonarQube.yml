@@ -1,42 +1,38 @@
-name: SonarQube Scan
+name: SonarQube
 
 on:
-  workflow_dispatch:
   push:
-    branches: ["develop"]
-  pull_request:
-    branches: ["develop"]
+    branches:
+      - develop
+
 
 jobs:
-  sonarqube:
+  build:
+    name: Build
     runs-on: ubuntu-latest
-
+    permissions: read-all
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-
-    - name: Set up JDK
-      uses: actions/setup-java@v2
-      with:
-        distribution: 'adopt'
-        java-version: '11'
-
-    - name: Build and analyze backend
-      run: |
-        ./mvnw clean verify sonar:sonar -Dsonar.projectKey=my-backend -Dsonar.host.url=https://your-sonarqube-instance -Dsonar.login=$SONAR_TOKEN
-      working-directory: backend
-
-    - name: Install Node.js and npm
-      uses: actions/setup-node@v2
-      with:
-        node-version: '14'
-
-    - name: Install dependencies and build front
-      run: |
-        npm install
-        npm run build
-      working-directory: frontend
-
-    - name: Analyze front with SonarQube
-      run: sonar-scanner -Dsonar.projectKey=my-frontend -Dsonar.sources=src -Dsonar.host.url=https://your-sonarqube-instance -Dsonar.login=$SONAR_TOKEN
-      working-directory: frontend
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      - name: Set up JDK 17
+        uses: actions/setup-java@v1
+        with:
+          java-version: 17
+      - name: Cache SonarQube packages
+        uses: actions/cache@v1
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+      - name: Cache Maven packages
+        uses: actions/cache@v1
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+      - name: Build and analyze
+        env:
+          SONAR_TOKEN: sqp_c88ffd034da8ca2fc7d4fbb335c718715b02da0d
+          SONAR_HOST_URL: http://localhost:9000
+        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=projetCloud -Dsonar.projectName='projetCloud'
