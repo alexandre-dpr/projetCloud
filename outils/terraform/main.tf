@@ -50,17 +50,17 @@ resource "null_resource" "helm_local" {
   }
 
 ## Installation de cert-manager
-  provisioner "local-exec" {
-    command = "helm repo add jetstack https://charts.jetstack.io"
-  }
-
-  provisioner "local-exec" {
-    command = "helm repo update"
-  }
-
-  provisioner "local-exec" {
-    command = "helm install cert-manager jetstack/cert-manager --version v1.5.3 --set installCRDs=true"
-  }
+#  provisioner "local-exec" {
+#    command = "helm repo add jetstack https://charts.jetstack.io"
+#  }
+#
+#  provisioner "local-exec" {
+#    command = "helm repo update"
+#  }
+#
+#  provisioner "local-exec" {
+#    command = "helm install cert-manager jetstack/cert-manager --version v1.5.3 --set installCRDs=true"
+#  }
 ## Fin installation de cert-manager
 
   provisioner "local-exec" {
