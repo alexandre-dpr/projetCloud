@@ -5,6 +5,9 @@ terraform {
       version = "=3.0.0"
     }
   }
+
+  # Gestion du stockage du tfstate
+  backend "azurerm" {}
 }
 
 provider "azurerm" {
@@ -46,6 +49,24 @@ resource "null_resource" "helm_local" {
     command = "kubectl create secret docker-registry cloud-secret --docker-server=https://ghcr.io/ --docker-username=notneeded --docker-password=${var.githubToken}"
   }
 
+## Installation de cert-manager
+  provisioner "local-exec" {
+    command = "kubectl create namespace cert-manager"
+  }
+
+  provisioner "local-exec" {
+    command = "helm repo add jetstack https://charts.jetstack.io"
+  }
+
+  provisioner "local-exec" {
+    command = "helm repo update"
+  }
+
+  provisioner "local-exec" {
+    command = "helm install cert-manager jetstack/cert-manager --namespace cert-manager --version v1.5.3 --set installCRDs=true"
+  }
+## Fin installation de cert-manager
+
   provisioner "local-exec" {
     # Build du chart Helm local
     command = "helm dependency build ${var.helm_folder}"
@@ -58,7 +79,7 @@ resource "null_resource" "helm_local" {
 
   provisioner "local-exec" {
     # Ajout du repo Helm nginx-stable
-    command = "helm repo add nginx-stable https://helm.nginx.com/stable"
+    command = "helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx"
   }
 
   provisioner "local-exec" {
@@ -68,12 +89,6 @@ resource "null_resource" "helm_local" {
 
   provisioner "local-exec" {
     # Installation de l'Ingress nginx
-    command = "helm install nginx-ingress nginx-stable/nginx-ingress --set rbac.create=true"
-  }
-
-  # Procédure de destruction
-  provisioner "local-exec" {
-    when    = destroy
-    command = "kubectl delete secret cloud-secret"
+    command = "helm install ingress-controller ingress-nginx/ingress-nginx"
   }
 }

@@ -2,8 +2,15 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ .Values.environment }}-ingress
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: letsencrypt
 spec:
   ingressClassName: nginx
+  tls:
+    - hosts:
+        - {{ .Values.environment }}.groupe6.froissant.work
+      secretName: secret-tls
   rules:
     - host: {{ .Values.environment }}.groupe6.froissant.work
       http:
