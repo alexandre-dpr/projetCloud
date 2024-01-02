@@ -51,10 +51,6 @@ resource "null_resource" "helm_local" {
 
 ## Installation de cert-manager
   provisioner "local-exec" {
-    command = "kubectl create namespace cert-manager"
-  }
-
-  provisioner "local-exec" {
     command = "helm repo add jetstack https://charts.jetstack.io"
   }
 
@@ -63,7 +59,7 @@ resource "null_resource" "helm_local" {
   }
 
   provisioner "local-exec" {
-    command = "helm install cert-manager jetstack/cert-manager --namespace cert-manager --version v1.5.3 --set installCRDs=true"
+    command = "helm install cert-manager jetstack/cert-manager --version v1.5.3 --set installCRDs=true"
   }
 ## Fin installation de cert-manager
 
@@ -78,7 +74,7 @@ resource "null_resource" "helm_local" {
   }
 
   provisioner "local-exec" {
-    # Ajout du repo Helm nginx-stable
+    # Ajout du repo Helm nginx
     command = "helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx"
   }
 
