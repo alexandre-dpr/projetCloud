@@ -1,10 +1,11 @@
 name: Tests-Unitaires-Backend
 
 on:
-  push:
-    branches: ["develop"]
-  pull_request:
-    branches: ["develop"]
+  workflow_dispatch:
+#  push:
+#    branches: ["develop"]
+#  pull_request:
+#    branches: ["develop"]
 
 jobs:
   build:
