@@ -57,6 +57,7 @@ jobs:
       - name: Récupération de l'IP
         id: get-ingress-ip
         run: |
+          sudo az aks get-credentials --resource-group ProjetCloud-${{ github.event.inputs.environment }} --name AKS-${{ github.event.inputs.environment }}
           INGRESS_IP=$(kubectl get services ingress-controller-ingress-nginx-controller -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
           echo "Ingress IP: $INGRESS_IP"
           echo "::set-output name=ingress-ip::$INGRESS_IP"
