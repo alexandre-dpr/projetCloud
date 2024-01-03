@@ -53,3 +53,23 @@ jobs:
           sudo az login --user ${{ secrets.AZURE_LOGIN }} --password ${{ secrets.AZURE_PASSWORD }}
           cd $GITHUB_WORKSPACE/outils/terraform
           sudo terraform apply -var="githubToken=${{ secrets.GITHUB_TOKEN }}" -var="env_name=${{ github.event.inputs.environment }}" -auto-approve
+
+      - name: Récupération de l'IP
+        id: get-ingress-ip
+        run: |
+          INGRESS_IP=$(kubectl get services ingress-controller-ingress-nginx-controller -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+          echo "Ingress IP: $INGRESS_IP"
+          echo "::set-output name=ingress-ip::$INGRESS_IP"
+
+      - name: Installer Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+      - name: Installer python
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests
+
+      - name: Mettre à jour l'ip du DNS
+        run: python $GITHUB_WORKSPACE/outils/terraform/scripts ${{ secrets.GANDI_API_KEY }} ${{ steps.get-ingress-ip.outputs.ingress-ip }}"
