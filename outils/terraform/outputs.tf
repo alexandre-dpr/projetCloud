@@ -6,5 +6,6 @@ resource "local_file" "kubeconfig" {
 
 output "ingress_ip" {
   description = "IP de l'ingress"
+  sensitive   = true
   value       = azurerm_kubernetes_cluster.cluster.kube_config[0].host
 }
