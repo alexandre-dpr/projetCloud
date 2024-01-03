@@ -49,20 +49,12 @@ jobs:
           sudo terraform init -backend-config=configs/${{ github.event.inputs.environment }}.conf
 
       - name: Appliquer Terraform
+        id: deploy-terraform
         run: |
           sudo az login --user ${{ secrets.AZURE_LOGIN }} --password ${{ secrets.AZURE_PASSWORD }}
           cd $GITHUB_WORKSPACE/outils/terraform
           sudo terraform apply -var="githubToken=${{ secrets.GITHUB_TOKEN }}" -var="env_name=${{ github.event.inputs.environment }}" -auto-approve
-
-      - name: Attendre que l'IP existe
-        run: sleep 30
-
-      - name: Récupération de l'IP
-        id: get-ingress-ip
-        run: |
-          sudo az login --user ${{ secrets.AZURE_LOGIN }} --password ${{ secrets.AZURE_PASSWORD }}
-          sudo az aks get-credentials --resource-group ProjetCloud-${{ github.event.inputs.environment }} --name AKS-${{ github.event.inputs.environment }}
-          INGRESS_IP=$(kubectl get services ingress-controller-ingress-nginx-controller -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+          INGRESS_IP=$(sudo terraform output -json ingress_ip)
           echo "Ingress IP: $INGRESS_IP"
           echo "::set-output name=ingress-ip::$INGRESS_IP"
 
@@ -77,4 +69,4 @@ jobs:
           pip install requests
 
       - name: Mettre à jour l'ip du DNS
-        run: python $GITHUB_WORKSPACE/outils/terraform/scripts ${{ secrets.GANDI_API_KEY }} ${{ steps.get-ingress-ip.outputs.ingress-ip }}"
+        run: python $GITHUB_WORKSPACE/outils/terraform/scripts ${{ secrets.GANDI_API_KEY }} ${{ steps.deploy-terraform.outputs.ingress-ip }}"
