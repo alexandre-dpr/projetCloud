@@ -68,7 +68,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         config.setAllowCredentials(true);
         config.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
         config.addAllowedMethod("*");
-        config.setAllowedOriginPatterns(Arrays.asList("http://recette.groupe6.froissant.work/*", "http://prod.groupe6.froissant.work/*"));
+        config.setAllowedOriginPatterns(Arrays.asList("https://recette.groupe6.froissant.work/*", "https://prod.groupe6.froissant.work/*"));
         source.registerCorsConfiguration("/**", config);
         FilterRegistrationBean<CorsFilter> bean = new FilterRegistrationBean<>(new CorsFilter(source));
         bean.setOrder(Ordered.HIGHEST_PRECEDENCE);
