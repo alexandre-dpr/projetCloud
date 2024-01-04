@@ -19,16 +19,18 @@ const routes = [
   },
   {
     path: '/partie/:id',
-    //path: '/partie',
     component: Partie,
     name: 'partie'
   },
   {
-    //path: '/partie/:id',
     path: '/salon',
     component: Salon,
     name: 'salon'
   },
+  {
+    path: '/:pathMatch(.*)*',
+    redirect: { name: 'login' }
+  }
 ]
 
 const router = createRouter({
