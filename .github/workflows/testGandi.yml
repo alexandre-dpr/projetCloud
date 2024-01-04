@@ -36,6 +36,7 @@ jobs:
 
       - name: Debug Kubernetes 
         run: |
+          sudo az login --user ${{ secrets.AZURE_LOGIN }} --password ${{ secrets.AZURE_PASSWORD }}
           sudo az aks get-credentials --resource-group ProjetCloud-recette --name AKS-recette
           kubectl config view
           kubectl get nodes
