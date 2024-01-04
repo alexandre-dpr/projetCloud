@@ -35,6 +35,6 @@ jobs:
       - name: Récupérer l'IP du service
         id: get_ip
         run: |
-          IP=$(kubectl get services ingress-controller-ingress-nginx-controller -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+          IP=$(kubectl get services ingress-controller-ingress-nginx-controller -o jsonpath='{.status.loadBalancer.ingress[0].ip}' --context ProjetCloud)
           echo "IP du service : $IP"
         shell: bash
