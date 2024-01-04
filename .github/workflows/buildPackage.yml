@@ -30,11 +30,12 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Définir l'environnement
+        id: get-env
         run: |
           if [ "${{ github.event.workflow_run.head_branch }}" == "develop" ]; then
-            echo "ENVIRONMENT=recette" >> $GITHUB_ENV
+            echo "::set-output name=environnement::"recette""
           else
-            echo "ENVIRONMENT=prod" >> $GITHUB_ENV
+            echo "::set-output name=environnement::"prod""
           fi
 
       - name: Build and push Docker image
@@ -43,7 +44,7 @@ jobs:
           context: .
           file: backend/Dockerfile-prod
           push: true
-          tags: ghcr.io/cripsoo/projetcloud/backend-${{ env.ENVIRONMENT }}:${{ steps.extract-version.outputs.version }}
+          tags: ghcr.io/cripsoo/projetcloud/backend-${{ steps.get-env.outputs.environnement }}:${{ steps.extract-version.outputs.version }}
 
   frontend:
     runs-on: ubuntu-latest
@@ -72,4 +73,4 @@ jobs:
           context: .
           file: frontend/Dockerfile-prod
           push: true
-          tags: ghcr.io/cripsoo/projetcloud/frontend-${{ env.ENVIRONMENT }}:${{ steps.extract-version.outputs.version }}
+          tags: ghcr.io/cripsoo/projetcloud/frontend-${{ steps.get-env.outputs.environnement }}:${{ steps.extract-version.outputs.version }}
