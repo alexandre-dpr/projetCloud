@@ -130,7 +130,7 @@ public class Facade implements IFacade{
     public ArrayList<SalonDTO> getSalons() throws SalonInexistantException{
         List<Salon> salons= salonRepository.findAll();
         if (salons.isEmpty()){
-            throw new SalonInexistantException("Aucun salon");
+            return null;
         }
         List<Puissance4> puissance4 = puissance4Repository.findAll();
         System.out.println(puissance4);
