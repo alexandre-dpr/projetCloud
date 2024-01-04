@@ -1,6 +1,6 @@
 <template>
-  <div v-if="notification !== undefined && notification.length === 0" class=" d-flex justify-center w-100 bg-red h-auto pa-3">
-      <p>{{ notification }}</p>
+  <div v-if="notification !== undefined" class=" d-flex justify-center w-100 bg-red h-auto pa-3">
+    <p>{{ notification }}</p>
   </div>
   <div class="background-menu">
     <div class="d-flex flex-column align-center">
@@ -67,7 +67,7 @@ import { useRouter } from "vue-router";
 import { jwtDecode } from "jwt-decode";
 import router from "@/router";
 import { Joueur } from "@/interface/Joueur";
-import {AxiosError} from "axios";
+import { AxiosError } from "axios";
 
 
 const isFull = ref(false);
@@ -76,7 +76,7 @@ const joueur1 = ref<Joueur>();
 const joueur2 = ref<Joueur>();
 const winner = ref<Joueur>()
 const joueurTour = ref<Joueur>();
-const notification = ref<String>("");
+const notification = ref<String>();
 
 const gameRequest = new GameRequest();
 var route: any = useRouter();
@@ -95,16 +95,16 @@ var board = ref([
 const getJeu = setInterval(async () => {
   if (!isFull.value) {
     try {
-    let response: any = await gameRequest.getSalon(route.currentRoute.value.params.id);
+      let response: any = await gameRequest.getSalon(route.currentRoute.value.params.id);
       if (response) {
         isFull.value = true;
       }
-    }catch (e : any) {
-    notification.value = e.response.data.errorMessage
-    setTimeout(() => {
-      notification.value= "";
-    }, 2000);
-  }
+    } catch (e: any) {
+      notification.value = e.response.data.errorMessage
+      setTimeout(() => {
+        notification.value = undefined;
+      }, 2000);
+    }
 
   } else {
     try {
@@ -123,10 +123,10 @@ const getJeu = setInterval(async () => {
 
       winner.value = response.winner !== null ? response.winner.username : null;
       partieTerminee.value = response.partieTerminee
-    }catch (e : any) {
+    } catch (e: any) {
       notification.value = e.response.data.errorMessage
       setTimeout(() => {
-        notification.value= "";
+        notification.value = undefined;
       }, 2000);
     }
   }
@@ -147,13 +147,13 @@ async function dropPiece(colIndex: any) {
 
     try {
       await gameRequest.jouerCoup(route.currentRoute.value.params.id, colIndex, tokenDecode.sub);
-    }catch (e : any) {
+    } catch (e: any) {
       notification.value = e.response.data.errorMessage
       setTimeout(() => {
-        notification.value= "";
+        notification.value = undefined;
       }, 2000);
     }
-    }
+  }
 
 }
 

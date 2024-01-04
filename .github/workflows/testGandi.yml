@@ -1,0 +1,40 @@
+name: testGandi
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        type: choice
+        description: "Choisir l'environnement"
+        required: true
+        options:
+          - recette
+          - prod
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout du code
+        uses: actions/checkout@v2
+
+      - name: Connexion Azure
+        uses: azure/CLI@v1
+        with:
+          azcliversion: 2.55.0
+          inlineScript: |
+            az login --user ${{ secrets.AZURE_LOGIN }} --password ${{ secrets.AZURE_PASSWORD }}
+
+      - name: Installer kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: 'v1.28.4'
+
+      - name: Récupérer l'IP du service
+        id: get_ip
+        run: |
+          IP=$(kubectl get services ingress-controller-ingress-nginx-controller -o jsonpath='{.status.loadBalancer.ingress[0].ip}' --context ProjetCloud)
+          echo "IP du service : $IP"
+        shell: bash
