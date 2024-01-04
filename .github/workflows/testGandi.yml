@@ -36,6 +36,7 @@ jobs:
 
       - name: Debug Kubernetes 
         run: |
+          az aks get-credentials --resource-group ProjetCloud-recette --name AKS-recette
           kubectl config view
           kubectl get nodes
           kubectl get pods --all-namespaces
