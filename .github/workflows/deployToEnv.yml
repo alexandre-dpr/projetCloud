@@ -54,26 +54,3 @@ jobs:
           sudo az login --user ${{ secrets.AZURE_LOGIN }} --password ${{ secrets.AZURE_PASSWORD }}
           cd $GITHUB_WORKSPACE/outils/terraform
           sudo terraform apply -var="githubToken=${{ secrets.GITHUB_TOKEN }}" -var="env_name=${{ github.event.inputs.environment }}" -auto-approve
-          KUBE_CONFIG=$(sudo terraform output -json kubeconfig)
-          echo "::set-output name=kube-config::$KUBE_CONFIG"
-
-      - name:
-        id: get-ip
-        uses: actions-hub/kubectl@master
-        env:
-          KUBE_CONFIG: ${{ steps.deploy-terraform.outputs.kube-config }}
-        with:
-          args: echo "::set-output name=ingress-ip::$(kubectl get services ingress-controller-ingress-nginx-controller -o jsonpath='{.status.loadBalancer.ingress[0].ip}')"
-
-      - name: Installer Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.8
-
-      - name: Installer les dépendances python
-        run: |
-          python -m pip install --upgrade pip
-          pip install requests
-
-      - name: Mettre à jour l'ip du DNS
-        run: python $GITHUB_WORKSPACE/outils/terraform/scripts ${{ secrets.GANDI_API_KEY }} ${{ steps.get-ip.outputs.ingress-ip }}
