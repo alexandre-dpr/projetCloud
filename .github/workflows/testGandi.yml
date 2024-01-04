@@ -15,7 +15,7 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-
+ 
     steps:
       - name: Checkout du code
         uses: actions/checkout@v2
@@ -31,9 +31,9 @@ jobs:
         uses: azure/setup-kubectl@v3
         with:
           version: 'v1.28.4'
-      - name: Debug Kubernetes
+      - name: Debug Kubernetes 
         run: |
-          kubectl cluster-info
+          kubectl config view
           kubectl get nodes
           kubectl get pods --all-namespaces
 
