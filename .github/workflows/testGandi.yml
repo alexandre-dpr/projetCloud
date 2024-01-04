@@ -36,10 +36,12 @@ jobs:
 
       - name: Debug Kubernetes 
         run: |
-          az aks get-credentials --resource-group ProjetCloud-recette --name AKS-recette
+          sudo az aks get-credentials --resource-group ProjetCloud-recette --name AKS-recette
           kubectl config view
           kubectl get nodes
           kubectl get pods --all-namespaces
+          IP=$(kubectl get services ingress-controller-ingress-nginx-controller -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+          echo "IP du service : $IP"
 
       - name: Récupérer l'IP du service
         id: get_ip
