@@ -4,6 +4,9 @@ Projet d'appli cloud, M2-DevOps
 
 [![Etat Build](https://github.com/cripsoo/projetCloud/actions/workflows/buildRecette.yml/badge.svg)](https://github.com/cripsoo/projetCloud/actions/workflows/buildRecette.yml)
 
+[Lien de la prod](https://prod.groupe6.froissant.work) \
+[Lien de la recette](https://recette.groupe6.froissant.work)
+
 ## Démarrage
 
 Le projet inclut des images docker pour faire entièrement tourner le projet en dev, ainsi qu'un conteneur d'outils avec Azure CLI, kubectl etc ... Il suffit de suivre l'installation suivante.
@@ -42,8 +45,8 @@ mvn test
 
 ## Déploiement
 
-Le projet se déploie sur Azure Cloud, avec kubernetes. \
-// A COMPLETER PAR LA SUITE : Décrire comment le déploimenet se fait en recette / prod
+Le projet se déploie sur Azure Cloud depuis les pipelines Github Actions. \
+Cela utilise Terraform, Helm, Kubectl etc...
 
 ## Construit avec
 
