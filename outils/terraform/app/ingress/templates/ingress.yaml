@@ -4,7 +4,6 @@ metadata:
   name: {{ .Values.environment }}-ingress
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt
-{{/*    acme.cert-manager.io/http01-edit-in-place: "true"*/}}
 spec:
   ingressClassName: nginx
   tls:
@@ -15,7 +14,7 @@ spec:
     - host: {{ .Values.environment }}.groupe6.froissant.work
       http:
         paths:
-          - path: /
+          - path: /.*
             pathType: Prefix
             backend:
               service:
