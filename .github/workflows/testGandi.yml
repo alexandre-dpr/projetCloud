@@ -31,10 +31,15 @@ jobs:
         uses: azure/setup-kubectl@v3
         with:
           version: 'v1.28.4'
+      - name: Debug Kubernetes
+        run: |
+          kubectl cluster-info
+          kubectl get nodes
+          kubectl get pods --all-namespaces
 
       - name: Récupérer l'IP du service
         id: get_ip
         run: |
-          IP=$(kubectl get services ingress-controller-ingress-nginx-controller -o jsonpath='{.status.loadBalancer.ingress[0].ip}' --context ProjetCloud)
+          IP=$(kubectl get services ingress-controller-ingress-nginx-controller -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
           echo "IP du service : $IP"
         shell: bash
