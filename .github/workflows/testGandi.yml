@@ -26,11 +26,14 @@ jobs:
           azcliversion: 2.55.0
           inlineScript: |
             az login --user ${{ secrets.AZURE_LOGIN }} --password ${{ secrets.AZURE_PASSWORD }}
+            az aks get-credentials --resource-group ProjetCloud-recette --name AKS-recette
+
 
       - name: Installer kubectl
         uses: azure/setup-kubectl@v3
         with:
           version: 'v1.28.4'
+
       - name: Debug Kubernetes 
         run: |
           kubectl config view
