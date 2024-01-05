@@ -7,10 +7,7 @@ jobs:
   docker-job:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/cripsoo/projetcloud/outils:latest
-      credentials:
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
+      image: registry.gitlab.com/justin.lecas/infrastructure-terraform-m2-miage-cours/tf
       volumes:
         - ${{ github.workspace }}:/repo
       options: --name outils
