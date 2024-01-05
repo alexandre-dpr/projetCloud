@@ -52,6 +52,6 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from) => {
-  document.title = to.meta?.title ?? "Puissance 4"
+  document.title = String(to.meta?.title) ?? "Puissance 4"
 })
 export default router
