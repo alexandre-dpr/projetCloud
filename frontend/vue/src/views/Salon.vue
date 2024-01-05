@@ -3,6 +3,10 @@
     <p>{{ notification }}</p>
   </div>
   <div class="background-menu">
+    <div>
+      <button class="bg-white pa-3 rounded-lg ml-2 mt-2" v-on:click="router.push('menu')">Retour au menu</button>
+    </div>
+
     <div class="d-flex flex-column align-center">
       <h1 class="text-white ">Puissance 4</h1>
       <div class="result-container mt-16">
@@ -42,7 +46,7 @@
 <script lang="ts" setup>
 import Button from '../components/CldButton.vue'
 import router from "@/router";
-import { onBeforeMount, ref } from "vue";
+import { onBeforeMount, onMounted, ref } from "vue";
 import { GameRequest } from "@/request/GameRequest";
 import { jwtDecode } from "jwt-decode";
 import { Salon } from "@/interface/Salon";
@@ -54,6 +58,18 @@ const token: any = localStorage.getItem("token")
 const tokenDecode: any = jwtDecode(token);
 const notification = ref<String>();
 
+onMounted(() => {
+  if (token === null) {
+    router.push("login");
+  }
+  if (token !== null) {
+    const tokenDecode: any = jwtDecode(token);
+    const currentTimestamp = Math.floor(Date.now() / 1000);
+    if (tokenDecode.exp < currentTimestamp) {
+      router.push("login")
+    }
+  }
+})
 
 onBeforeMount(async () => {
   try {

@@ -92,6 +92,19 @@ var board = ref([
   [null, null, null, null, null, null, null],
 ])
 
+onMounted(() => {
+  if (token === null) {
+    router.push("login");
+  }
+  if (token !== null) {
+    const tokenDecode: any = jwtDecode(token);
+    const currentTimestamp = Math.floor(Date.now() / 1000);
+    if (tokenDecode.exp < currentTimestamp) {
+      router.push("login")
+    }
+  }
+})
+
 const getJeu = setInterval(async () => {
   if (!isFull.value) {
     try {
