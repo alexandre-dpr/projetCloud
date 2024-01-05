@@ -23,15 +23,6 @@ jobs:
         with:
           version: 'v1.28.4'
 
-      - name: Récupérer l'IP du service
-        id: get_ip
-        shell: bash
-        run: |
-          sudo az login --user ${{ secrets.AZURE_LOGIN }} --password ${{ secrets.AZURE_PASSWORD }}
-          sudo az aks get-credentials --resource-group ProjetCloud-recette --name AKS-recette
-          IP=$(sudo kubectl get services ingress-controller-ingress-nginx-controller -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
-          echo "::set-output name=ingress-ip::$IP"
-
       - name: Installer Python
         uses: actions/setup-python@v2
         with:
@@ -42,7 +33,13 @@ jobs:
           python -m pip install --upgrade pip
           pip install requests
 
-      - name: Mettre à jour l'ip du DNS
+      - name: Récupérer l'IP du service
+        id: get_ip
+        shell: bash
         run: |
-          echo "On met à jour l'ip: ${{ steps.get-ip.outputs.ingress-ip }}"
-          python $GITHUB_WORKSPACE/outils/terraform/scripts ${{ secrets.GANDI_API_KEY }} ${{ steps.get-ip.outputs.ingress-ip }}
+          sudo az login --user ${{ secrets.AZURE_LOGIN }} --password ${{ secrets.AZURE_PASSWORD }}
+          sudo az aks get-credentials --resource-group ProjetCloud-recette --name AKS-recette
+          IP=$(sudo kubectl get services ingress-controller-ingress-nginx-controller -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+          echo "On met à jour l'ip: $IP"
+          echo "On met à jour l'ip: ${IP}"
+          python $GITHUB_WORKSPACE/outils/terraform/scripts ${{ secrets.GANDI_API_KEY }} $IP
