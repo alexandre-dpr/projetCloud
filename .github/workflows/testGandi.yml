@@ -23,16 +23,17 @@ jobs:
         with:
           args: docker restart outils
 
-      - name: super-step
-        shell: bash
-        run: |
-          docker exec -ti outils bash
-          cd /repo/outils/terraform/scripts
-          sudo apt update
-          sudo apt install python3
-          sudo apt install python3-pip
-          sudo pip3 install requests
-          python3 update_api.py ${{ secrets.GANDI_API_KEY }} 12.12.12.12
+      - name: Executer commandes
+        uses: docker://outils
+        with:
+          entrypoint: /bin/sh
+          args: |
+            cd /repo/outils/terraform/scripts
+            sudo apt update
+            sudo apt install python3
+            sudo apt install python3-pip
+            sudo pip3 install requests
+            python3 update_api.py ${{ secrets.GANDI_API_KEY }} 12.12.12.12
 
 #jobs:
 #  build:
