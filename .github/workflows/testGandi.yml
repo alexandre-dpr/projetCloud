@@ -3,26 +3,41 @@ name: testGandi
 on:
   workflow_dispatch:
 
+#jobs:
+#  compile:
+#    name: Run docker file
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - name: Check out the repo
+#        uses: actions/checkout@v2
+#
+#      - name: Run the build process with Docker
+#        uses: addnab/docker-run-action@v3
+#        with:
+#          username: ${{ github.actor }}
+#          password: ${{ secrets.GITHUB_TOKEN }}
+#          registry: gcr.io
+#          image: cripsoo/projetcloud/backend-recette:1.0.0
+#          options: -v ${{ github.workspace }}:/
+#          run: |
+#            echo "Running script"
+#            ls
+#
 jobs:
-  compile:
-    name: Run docker file
+  docker-job:
     runs-on: ubuntu-latest
-
+    container:
+      image: ghcr.io/cripsoo/projetcloud/backend-recette:1.0.0
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
     steps:
-      - name: Check out the repo
-        uses: actions/checkout@v2
-
-      - name: Run the build process with Docker
-        uses: addnab/docker-run-action@v3
-        with:
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-          registry: gcr.io
-          image: cripsoo/projetcloud/backend-recette:1.0.0
-          options: -v ${{ github.workspace }}:/
-          run: |
-            echo "Running script"
-            ls
+      - name: super-step
+        shell: bash
+        run: |
+          echo "Running script"
+          ls
 
 #jobs:
 #  build:
