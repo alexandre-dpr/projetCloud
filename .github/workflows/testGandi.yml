@@ -31,10 +31,15 @@ jobs:
             apt install -y python3
             apt install -y python3-pip
             pip3 install requests
-            python3 update_api.py $GANDI_API_KEY 12.12.12.12
+            sudo az login --user $AZURE_LOGIN --password $AZURE_PASSWORD
+            sudo az aks get-credentials --resource-group ProjetCloud-recette --name AKS-recette
+            IP=$(kubectl get services ingress-controller-ingress-nginx-controller -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+            python3 update_api.py $GANDI_API_KEY $IP
           "
         env:
           GANDI_API_KEY: ${{ secrets.GANDI_API_KEY }}
+          AZURE_LOGIN: ${{ secrets.AZURE_LOGIN }}
+          AZURE_PASSWORD: ${{ secrets.AZURE_PASSWORD }}
 
 #jobs:
 #  build:
