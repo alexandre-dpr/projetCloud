@@ -7,7 +7,7 @@ jobs:
   docker-job:
     runs-on: ubuntu-latest
     container:
-      image: registry.gitlab.com/justin.lecas/infrastructure-terraform-m2-miage-cours/tf
+      image: registry.gitlab.com/justin.lecas/infrastructure-terraform-m2-miage-cours/tf:1.0.0
       volumes:
         - ${{ github.workspace }}:/repo
       options: --name outils
