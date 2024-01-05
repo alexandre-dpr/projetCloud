@@ -3,78 +3,78 @@ name: testGandi
 on:
   workflow_dispatch:
 
-jobs:
-  docker-job:
-    runs-on: ubuntu-latest
-    container:
-      image: registry.gitlab.com/justin.lecas/infrastructure-terraform-m2-miage-cours/tf:1.0.0
-      volumes:
-        - ${{ github.workspace }}:/repo
-      options: --name outils
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Restart volume
-        uses: docker://docker
-        with:
-          args: docker restart outils
-
-      - name: Executer commandes
-        run: |
-          docker exec outils /bin/sh -c "
-            cd /repo/outils/terraform/scripts
-            apt update
-            apt install -y python3
-            apt install -y python3-pip
-            pip3 install requests
-            sudo az login --user $AZURE_LOGIN --password $AZURE_PASSWORD
-            sudo az aks get-credentials --resource-group ProjetCloud-recette --name AKS-recette
-            IP=$(sudo kubectl get services ingress-controller-ingress-nginx-controller -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
-            echo "$(sudo kubectl get services ingress-controller-ingress-nginx-controller -o jsonpath='{.status.loadBalancer.ingress[0].ip}')"
-            python3 update_api.py $GANDI_API_KEY $IP
-          "
-        env:
-          GANDI_API_KEY: ${{ secrets.GANDI_API_KEY }}
-          AZURE_LOGIN: ${{ secrets.AZURE_LOGIN }}
-          AZURE_PASSWORD: ${{ secrets.AZURE_PASSWORD }}
-
 #jobs:
-#  build:
-#
+#  docker-job:
 #    runs-on: ubuntu-latest
+#    container:
+#      image: registry.gitlab.com/justin.lecas/infrastructure-terraform-m2-miage-cours/tf:1.0.0
+#      volumes:
+#        - ${{ github.workspace }}:/repo
+#      options: --name outils
+#    steps:
+#      - name: Checkout code
+#        uses: actions/checkout@v2
 #
-##    steps:
-##      - name: Checkout du code
-##        uses: actions/checkout@v2
-##
-##      - name: Connexion Azure
-##        uses: azure/CLI@v1
-##        with:
-##          azcliversion: 2.55.0
-##          inlineScript: |
-##            az login --user ${{ secrets.AZURE_LOGIN }} --password ${{ secrets.AZURE_PASSWORD }}
-##            az aks get-credentials --resource-group ProjetCloud-recette --name AKS-recette
-##
-##
-##      - name: Installer kubectl
-##        uses: azure/setup-kubectl@v3
-##        with:
-##          version: 'v1.28.4'
-##
-##      - name: Debug Kubernetes
-##        run: |
-##          sudo az login --user ${{ secrets.AZURE_LOGIN }} --password ${{ secrets.AZURE_PASSWORD }}
-##          sudo az aks get-credentials --resource-group ProjetCloud-recette --name AKS-recette
-##          kubectl config view
-##          kubectl get nodes
-##          kubectl get pods --all-namespaces
-##          IP=$(kubectl get services ingress-controller-ingress-nginx-controller -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
-##          echo "IP du service : $IP"
-##
-##      - name: Récupérer l'IP du service
-##        id: get_ip
-##        run: |
-##          IP=$(kubectl get services ingress-controller-ingress-nginx-controller -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
-##          echo "IP du service : $IP"
-##        shell: bash
+#      - name: Restart volume
+#        uses: docker://docker
+#        with:
+#          args: docker restart outils
+#
+#      - name: Executer commandes
+#        run: |
+#          docker exec outils /bin/sh -c "
+#            cd /repo/outils/terraform/scripts
+#            apt update
+#            apt install -y python3
+#            apt install -y python3-pip
+#            pip3 install requests
+#            sudo az login --user $AZURE_LOGIN --password $AZURE_PASSWORD
+#            sudo az aks get-credentials --resource-group ProjetCloud-recette --name AKS-recette
+#            IP=$(sudo kubectl get services ingress-controller-ingress-nginx-controller -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+#            echo "$(sudo kubectl get services ingress-controller-ingress-nginx-controller -o jsonpath='{.status.loadBalancer.ingress[0].ip}')"
+#            python3 update_api.py $GANDI_API_KEY $IP
+#          "
+#        env:
+#          GANDI_API_KEY: ${{ secrets.GANDI_API_KEY }}
+#          AZURE_LOGIN: ${{ secrets.AZURE_LOGIN }}
+#          AZURE_PASSWORD: ${{ secrets.AZURE_PASSWORD }}
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout du code
+        uses: actions/checkout@v4
+
+      - name: Connexion Azure
+        uses: azure/CLI@v1
+        with:
+          azcliversion: 2.55.0
+          inlineScript: |
+            sudo az login --user ${{ secrets.AZURE_LOGIN }} --password ${{ secrets.AZURE_PASSWORD }}
+            sudo az aks get-credentials --resource-group ProjetCloud-recette --name AKS-recette
+
+
+      - name: Installer kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: 'v1.28.4'
+
+      - name: Debug Kubernetes
+        run: |
+          sudo az login --user ${{ secrets.AZURE_LOGIN }} --password ${{ secrets.AZURE_PASSWORD }}
+          sudo az aks get-credentials --resource-group ProjetCloud-recette --name AKS-recette
+          sudo kubectl config view
+          sudo kubectl get nodes
+          sudo kubectl get pods --all-namespaces
+          IP=$(sudo kubectl get services ingress-controller-ingress-nginx-controller -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+          echo "IP du service : $IP"
+
+      - name: Récupérer l'IP du service
+        id: get_ip
+        run: |
+          IP=$(sudo kubectl get services ingress-controller-ingress-nginx-controller -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+          echo "IP du service : $IP"
+        shell: bash
