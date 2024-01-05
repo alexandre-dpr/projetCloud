@@ -23,14 +23,25 @@
 import router from "@/router";
 import { jwtDecode } from "jwt-decode";
 import { GameRequest } from "@/request/GameRequest";
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 
 const token: any = localStorage.getItem("token")
 const tokenDecode: any = jwtDecode(token);
 var gameRequest = new GameRequest();
 const notification = ref<String>();
 
-
+onMounted(() => {
+  if (token === null) {
+    router.push("login");
+  }
+  if (token !== null) {
+    const tokenDecode: any = jwtDecode(token);
+    const currentTimestamp = Math.floor(Date.now() / 1000);
+    if (tokenDecode.exp < currentTimestamp) {
+      router.push("login")
+    }
+  }
+})
 
 async function creerPartie() {
   try {

@@ -10,22 +10,34 @@ const routes = [
   {
     path: '/',
     component: Login,
-    name: 'login'
+    name: 'login',
+    meta: {
+      title: "Login-Puissance 4"
+    }
   },
   {
     path: '/menu',
     component: Menu,
-    name: 'menu'
+    name: 'menu',
+    meta: {
+      title: "Menu-Puissance 4"
+    }
   },
   {
     path: '/partie/:id',
     component: Partie,
-    name: 'partie'
+    name: 'partie',
+    meta: {
+      title: "Partie-Puissance 4"
+    }
   },
   {
     path: '/salon',
     component: Salon,
-    name: 'salon'
+    name: 'salon',
+    meta: {
+      title: "Salon-Puissance 4"
+    }
   },
   {
     path: '/:pathMatch(.*)*',
@@ -33,9 +45,13 @@ const routes = [
   }
 ]
 
+
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
 })
 
+router.beforeEach((to, from) => {
+  document.title = to.meta?.title ?? "Puissance 4"
+})
 export default router
