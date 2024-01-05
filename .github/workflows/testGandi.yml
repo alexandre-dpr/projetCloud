@@ -30,8 +30,8 @@ jobs:
             pip3 install requests
             sudo az login --user $AZURE_LOGIN --password $AZURE_PASSWORD
             sudo az aks get-credentials --resource-group ProjetCloud-recette --name AKS-recette
-            IP=$(kubectl get services ingress-controller-ingress-nginx-controller -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
-            kubectl get services 1>&2
+            IP=$(sudo kubectl get services ingress-controller-ingress-nginx-controller -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+            echo "$(sudo kubectl get services ingress-controller-ingress-nginx-controller -o jsonpath='{.status.loadBalancer.ingress[0].ip}')"
             python3 update_api.py $GANDI_API_KEY $IP
           "
         env:
