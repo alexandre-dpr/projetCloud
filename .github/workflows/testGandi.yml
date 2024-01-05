@@ -41,5 +41,4 @@ jobs:
           sudo az aks get-credentials --resource-group ProjetCloud-recette --name AKS-recette
           IP=$(sudo kubectl get services ingress-controller-ingress-nginx-controller -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
           echo "On met à jour l'ip: $IP"
-          echo "On met à jour l'ip: ${IP}"
-          python $GITHUB_WORKSPACE/outils/terraform/scripts ${{ secrets.GANDI_API_KEY }} $IP
+          python $GITHUB_WORKSPACE/outils/terraform/scripts/update_api.py ${{ secrets.GANDI_API_KEY }} $IP
