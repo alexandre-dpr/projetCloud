@@ -3,32 +3,11 @@ name: testGandi
 on:
   workflow_dispatch:
 
-#jobs:
-#  compile:
-#    name: Run docker file
-#    runs-on: ubuntu-latest
-#
-#    steps:
-#      - name: Check out the repo
-#        uses: actions/checkout@v2
-#
-#      - name: Run the build process with Docker
-#        uses: addnab/docker-run-action@v3
-#        with:
-#          username: ${{ github.actor }}
-#          password: ${{ secrets.GITHUB_TOKEN }}
-#          registry: gcr.io
-#          image: cripsoo/projetcloud/backend-recette:1.0.0
-#          options: -v ${{ github.workspace }}:/
-#          run: |
-#            echo "Running script"
-#            ls
-#
 jobs:
   docker-job:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/cripsoo/projetcloud/backend-recette:1.0.0
+      image: ghcr.io/cripsoo/projetcloud/outils:latest
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
@@ -37,6 +16,7 @@ jobs:
         shell: bash
         run: |
           echo "Running script"
+          cd /github/workspace/
           ls
 
 #jobs:
