@@ -53,8 +53,8 @@ jobs:
         with:
           azcliversion: 2.55.0
           inlineScript: |
-            sudo az login --user ${{ secrets.AZURE_LOGIN }} --password ${{ secrets.AZURE_PASSWORD }}
-            sudo az aks get-credentials --resource-group ProjetCloud-recette --name AKS-recette
+            az login --user ${{ secrets.AZURE_LOGIN }} --password ${{ secrets.AZURE_PASSWORD }}
+            az aks get-credentials --resource-group ProjetCloud-recette --name AKS-recette
 
 
       - name: Installer kubectl
