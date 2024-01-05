@@ -13,10 +13,20 @@ jobs:
         password: ${{ secrets.GITHUB_TOKEN }}
       volumes:
         - ${{ github.workspace }}:/repo
+      options: --name outils
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Restart volume
+        uses: docker://docker
+        with:
+          args: docker restart outils
+
       - name: super-step
         shell: bash
         run: |
+          docker exec -ti outils bash
           cd /repo/outils/terraform/scripts
           sudo apt update
           sudo apt install python3
