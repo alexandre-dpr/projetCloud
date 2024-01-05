@@ -16,6 +16,7 @@ jobs:
         shell: bash
         run: |
           echo "Running script"
+          ls
           cd /github/workspace/
           ls
 
