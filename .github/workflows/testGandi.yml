@@ -17,10 +17,12 @@ jobs:
       - name: super-step
         shell: bash
         run: |
-          echo "Running script"
-          echo $(ls)
-          cd /github/workspace/
-          ls
+          cd /repo/outils/terraform/scripts
+          sudo apt update
+          sudo apt install python3
+          sudo apt install python3-pip
+          sudo pip3 install requests
+          python3 update_api.py ${{ secrets.GANDI_API_KEY }} 12.12.12.12
 
 #jobs:
 #  build:
