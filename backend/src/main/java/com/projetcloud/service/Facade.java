@@ -145,13 +145,15 @@ public class Facade implements IFacade{
     }
 
     private void getSalonByUser(Optional<User> user) {
-        List<Salon> salons = salonRepository.findByListeJoueur(user.get().getUsername());
-        List<Puissance4> parties = puissance4Repository.findByJoueurs(user.get().getUsername());
-        if (!salons.isEmpty()){
-            salonRepository.deleteAll(salons);
-        }
-        if (!parties.isEmpty()){
-            puissance4Repository.deleteAll(parties);
+        if (user.isPresent()) {
+            List<Salon> salons = salonRepository.findByListeJoueur(user.get().getUsername());
+            List<Puissance4> parties = puissance4Repository.findByJoueurs(user.get().getUsername());
+            if (!salons.isEmpty()) {
+                salonRepository.deleteAll(salons);
+            }
+            if (!parties.isEmpty()) {
+                puissance4Repository.deleteAll(parties);
+            }
         }
     }
 
