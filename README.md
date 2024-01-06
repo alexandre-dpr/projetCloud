@@ -43,6 +43,12 @@ Pour faire tourner les tests unitaires du back, il suffit de faire :
 mvn test
 ```
 
+## Sonarqube
+
+Voici le lien de [Sonarqube](https://sonarqube-tgpnem3wmwstq.azurewebsites.net/projects/create) : 
+* Login : admin 
+* Mot de passe : XhFeBiA19emoSJj
+
 ## Déploiement
 
 Le projet se déploie sur Azure Cloud depuis les pipelines Github Actions. \

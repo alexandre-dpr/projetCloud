@@ -15,7 +15,7 @@ import java.util.function.Function;
 
 @Component
 public class JwtTokenUtil implements Serializable {
-    public static final long JWT_TOKEN_VALIDITY_TIME = 24 * 60 * 60;
+    public static final long JWT_TOKEN_VALIDITY_TIME = 24L * 60 * 60;
 
     @Value("${jwt.secret}")
     private String SECRET;
