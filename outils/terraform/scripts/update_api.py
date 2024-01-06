@@ -2,8 +2,11 @@ import sys
 import requests
 
 
-def update_dns_record(token, rrset_value):
-    url = "https://api.gandi.net/v5/livedns/domains/froissant.work/records/%2A.groupe6"
+def update_dns_record(token, rrset_value, environnement):
+    if environnement == "prod":
+        url = "https://api.gandi.net/v5/livedns/domains/froissant.work/records/prod.groupe6"
+    elif environnement == "recette":
+        url = "https://api.gandi.net/v5/livedns/domains/froissant.work/records/recette.groupe6"
 
     headers = {
         "Authorization": f"Bearer {token}",
@@ -36,12 +39,13 @@ def update_dns_record(token, rrset_value):
 
 if __name__ == "__main__":
     # Vérifier que le nombre d'arguments est correct
-    if len(sys.argv) != 3:
+    if len(sys.argv) != 4:
         print("Usage: python nom_du_script.py <token_gandi> <ip>")
         sys.exit(1)
 
     # Récupérer les valeurs des arguments
     token_gandi = sys.argv[1]
     ip = sys.argv[2]
+    environnement = sys.argv[3]
 
-    update_dns_record(token_gandi, ip)
+    update_dns_record(token_gandi, ip, environnement)
