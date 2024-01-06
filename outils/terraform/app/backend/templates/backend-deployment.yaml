@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: backend-container
-          image: {{ .Values.image.repository }}{{ .Values.environment }}:{{ .Values.image.tag }}
+          image: {{ .Values.image.repository }}{{ .Values.global.environment }}:{{ .Values.image.tag }}
           ports:
             - containerPort: 8080
       imagePullSecrets:

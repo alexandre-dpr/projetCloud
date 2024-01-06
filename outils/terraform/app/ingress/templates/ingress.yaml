@@ -1,17 +1,17 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ .Values.environment }}-ingress
+  name: {{ .Values.global.environment }}-ingress
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt
 spec:
   ingressClassName: nginx
   tls:
     - hosts:
-        - {{ .Values.environment }}.groupe6.froissant.work
+        - {{ .Values.global.environment }}.groupe6.froissant.work
       secretName: secret-tls
   rules:
-    - host: {{ .Values.environment }}.groupe6.froissant.work
+    - host: {{ .Values.global.environment }}.groupe6.froissant.work
       http:
         paths:
           - path: /

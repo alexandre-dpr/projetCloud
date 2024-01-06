@@ -1,1 +1,2 @@
-environment: recette
+global:
+  environment: recette

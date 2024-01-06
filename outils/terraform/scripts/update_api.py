@@ -37,11 +37,11 @@ def update_dns_record(token, rrset_value):
 if __name__ == "__main__":
     # Vérifier que le nombre d'arguments est correct
     if len(sys.argv) != 3:
-        print("Usage: python nom_du_script.py <token_bearer> <rrset_value>")
+        print("Usage: python nom_du_script.py <token_gandi> <ip>")
         sys.exit(1)
 
     # Récupérer les valeurs des arguments
-    token_bearer = sys.argv[1]
-    rrset_value = sys.argv[2]
+    token_gandi = sys.argv[1]
+    ip = sys.argv[2]
 
-    update_dns_record(token_bearer, rrset_value)
+    update_dns_record(token_gandi, ip)
