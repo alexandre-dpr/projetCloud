@@ -70,7 +70,7 @@ resource "null_resource" "helm_local" {
 
   provisioner "local-exec" {
     # Installation du chart Helm local
-    command = "helm install projetcloud-${var.env_name} ${var.helm_folder} --set global.environment=${var.env_name}"
+    command = "helm install projetcloud-${var.env_name} ${var.helm_folder} --values values-${var.env_name}.yaml"
   }
 
   provisioner "local-exec" {
