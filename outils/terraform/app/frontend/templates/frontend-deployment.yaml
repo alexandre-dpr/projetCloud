@@ -20,7 +20,5 @@ spec:
               value: "https://{{ .Values.global.environment }}.groupe6.froissant.work"
           ports:
             - containerPort: 80
-          # TODO REMOVE
-          imagePullPolicy: Always
       imagePullSecrets:
         - name: cloud-secret
