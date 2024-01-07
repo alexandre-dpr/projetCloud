@@ -1,10 +1,10 @@
 import axios from 'axios';
-import {getApiServer} from "@/utils/constant";
+import {base_api} from "@/utils/constant";
 
 export class GameRequest{
   async creerPartie(nomJoueur: String){
     try {
-      const response = await axios.post(getApiServer()+"salon",{
+      const response = await axios.post(base_api +"salon",{
         "username" : nomJoueur,
       },
         {
@@ -20,7 +20,7 @@ export class GameRequest{
 
   async getPartie(idPartie: number){
     try {
-      const response = await axios.get(getApiServer()+"partie/"+idPartie,
+      const response = await axios.get(base_api + "partie/"+idPartie,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -34,7 +34,7 @@ export class GameRequest{
 
   async jouerCoup(idPartie: number, colonne :number, joueur : string){
     try {
-      const response = await axios.post(getApiServer()+"partie/"+idPartie+"/coup",{
+      const response = await axios.post(base_api + "partie/"+idPartie+"/coup",{
           "colonne" : colonne,
           "joueur" : joueur,
         },
@@ -50,7 +50,7 @@ export class GameRequest{
   }
   async getSalon(idPartie: number){
     try {
-      const response = await axios.get(getApiServer()+"salon/"+idPartie,
+      const response = await axios.get(base_api + "salon/"+idPartie,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -63,7 +63,7 @@ export class GameRequest{
   }
   async joinSalon(idPartie: number, nomJoueur: String){
     try {
-      const response = await axios.post(getApiServer()+"salon/"+idPartie,{
+      const response = await axios.post(base_api + "salon/"+idPartie,{
           "username" : nomJoueur,
         },
         {
@@ -78,7 +78,7 @@ export class GameRequest{
   }
   async getSalons(){
     try {
-      return await axios.get(getApiServer()+"salon",
+      return await axios.get(base_api + "salon",
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
