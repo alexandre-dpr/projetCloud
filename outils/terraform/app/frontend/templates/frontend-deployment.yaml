@@ -17,7 +17,7 @@ spec:
           image: {{ .Values.image.repository }}{{ .Values.global.environment }}:{{ .Values.image.tag }}
           env:
             - name: VUE_APP_API_URL
-              value: https://{{ .Values.global.environment }}.groupe6.froissant.work
+              value: "https://{{ .Values.global.environment }}.groupe6.froissant.work"
           ports:
             - containerPort: 80
       imagePullSecrets:
