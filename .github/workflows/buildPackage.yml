@@ -87,3 +87,5 @@ jobs:
           file: frontend/Dockerfile-prod
           push: true
           tags: ghcr.io/cripsoo/projetcloud/frontend-${{ steps.get-env.outputs.environnement }}:${{ steps.extract-version.outputs.version }}
+          build-args: |
+            "VUE_APP_ENV=${{ steps.get-env.outputs.environnement }}"
