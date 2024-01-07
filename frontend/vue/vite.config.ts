@@ -8,6 +8,8 @@ import { defineConfig } from 'vite'
 import { fileURLToPath, URL } from 'node:url'
 
 // https://vitejs.dev/config/
+// @ts-ignore
+// @ts-ignore
 export default defineConfig({
   plugins: [
     vue({
@@ -47,6 +49,7 @@ export default defineConfig({
   server: {
     port: 3000,
     host: '0.0.0.0',
+    // @ts-ignore
     disableHostCheck: true,
     watchOptions: {
       poll: true
