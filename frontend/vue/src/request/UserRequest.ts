@@ -1,11 +1,10 @@
 import axios from 'axios';
-import {getApiServer} from "@/utils/constant";
 
 export class UserRequest {
 
   async login(user:string, password:string){
     try {
-      return await axios.post(getApiServer()+"auth/login",
+      return await axios.post("auth/login",
         {
           "username" : user,
           "password" : password
@@ -17,7 +16,7 @@ export class UserRequest {
 
   async register(name: string, password:string) {
     try {
-      return await axios.post(getApiServer()+"auth/register",
+      return await axios.post("auth/register",
         {
           "username" : name,
           "password" : password
