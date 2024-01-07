@@ -13,5 +13,7 @@ export function getApiServer() {
     } else {
       return API_SERVER.value
     }
+  } else {
+    console.log(API_SERVER.value)
   }
 }
