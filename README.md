@@ -2,18 +2,18 @@
 
 Projet d'appli cloud, M2-DevOps
 
-[![Etat Build](https://github.com/cripsoo/projetCloud/actions/workflows/buildRecette.yml/badge.svg)](https://github.com/cripsoo/projetCloud/actions/workflows/buildRecette.yml)
+[![Build-and-Push-to-Container-Registry](https://github.com/cripsoo/projetCloud/actions/workflows/buildPackage.yml/badge.svg)](https://github.com/cripsoo/projetCloud/actions/workflows/buildPackage.yml)
 
 [Lien de la prod](https://prod.groupe6.froissant.work) \
 [Lien de la recette](https://recette.groupe6.froissant.work)
 
 ## Démarrage
 
-Le projet inclut des images docker pour faire entièrement tourner le projet en dev, ainsi qu'un conteneur d'outils avec Azure CLI, kubectl etc ... Il suffit de suivre l'installation suivante.
+Le projet inclut des images docker pour faire entièrement tourner le projet en local (images dev), ainsi qu'un conteneur d'outils avec Azure CLI, kubectl etc ... Il suffit de suivre l'installation suivante.
 
 ### Installation
 
-Installation de l'environnement de dev :
+Installation de l'environnement local :
 
 ```bash
 docker compose -f .\docker-compose-dev.yaml build
@@ -30,15 +30,15 @@ docker compose -f .\docker-compose.yaml up -d
 
 Ces conteneurs font directement tourner le projet. \
 Voici les URL locales:
-- [frontend](http://localhost:3000)
-- [backend](http://localhost:8080)
-- // A COMPLETER PAR LA SUITE : swagger, sonarQube...
+- [Frontend](http://localhost:3000)
+- [Backend](http://localhost:8080)
+- [Swagger](http://localhost:8080/swagger-ui/)
 
 Pour relancer le back par exemple, il suffit de relancer le conteneur.
 
 ## Exécution des tests
 
-Pour faire tourner les tests unitaires du back, il suffit de faire :
+Pour faire tourner les tests unitaires du back, il suffit de lancer le pipeline dédié ou de faire :
 ```bash
 mvn test
 ```
@@ -63,10 +63,8 @@ Cela utilise Terraform, Helm, Kubectl etc...
 
 ## Versionnage
 
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
-
-// TODO Etablir les conventions de versionnage
+Nous utilisons [SemVer](http://semver.org/) pour le versionnage. Pour voir les versions disponibles, consultez les tags de ce référentiel [ici](https://github.com/cripsoo/projetCloud/tags).
 
 ## Diagramme architectural détaillé de l'application:
 
-[Diagramme](https://www.figma.com/file/spQDsmKywXDPW3IYwXmuri/Architecture-projet-cloud?type=design&node-id=2%3A10&mode=design&t=krFaZnMfluucCUx5-1)
+[Diagramme](https://cdn.discordapp.com/attachments/1157209192080363561/1193650886224904292/Diagramme_DevOps.png?ex=65ad7d04&is=659b0804&hm=f907afc03c1a3db8ce9361c474e122916757f8d4df9545ccc64145711812e30e&)
